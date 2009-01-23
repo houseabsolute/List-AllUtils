@@ -23,7 +23,7 @@ __END__
 
 =head1 NAME
 
-List::AllUtils - Combines List::Util and List::MoreUtils
+List::AllUtils - Combines List::Util and List::MoreUtils in one bite-sized package
 
 =head1 SYNOPSIS
 
