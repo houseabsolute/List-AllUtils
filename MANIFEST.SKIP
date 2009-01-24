@@ -36,5 +36,7 @@
 # Avoid tarballs
 \.(?:tar|tgz|tar\.gz)$
 
+^List-AllUtils
+
 # No need to ship this
 \.shipit
