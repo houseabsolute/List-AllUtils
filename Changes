@@ -1,3 +1,11 @@
+0.02   2009-09-12
+
+- Added a generated Makefile.PL. Fixes RT #48805.
+
+- Code tweak so that this module will always export everything exported by
+  List::Util, even if that module adds new functions.
+
+
 0.01   2009-01-23
 
 - First version, released on an unsuspecting world.
