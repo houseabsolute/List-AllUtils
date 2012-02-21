@@ -11,7 +11,7 @@ BEGIN
     require List::Util;
     List::Util->import( @List::Util::EXPORT_OK );
 }
-use List::MoreUtils qw( :all );
+use List::MoreUtils 0.28 qw( :all );
 
 use base 'Exporter';
 
