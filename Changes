@@ -1,4 +1,4 @@
-{{$$NEXT}
+{{$NEXT}}
 
 - Updated docs to match List::MoreUtils 0.28+. Reported by ilmari. RT #75196.
 
