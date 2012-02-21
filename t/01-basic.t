@@ -1,8 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 9;
-
+use Test::More 0.88;
 
 {
     package Foo;
@@ -40,3 +39,4 @@ is( ( List::AllUtils::first { $_ > 5 } ( 1, 2, 5, 22, 7 ) ),
 ok( ( List::AllUtils::any { $_ > 5 } ( 1, 2, 5, 22, 7 ) ),
     'explicitly calling List::AllUtils::any produces the correct result' );
 
+done_testing();
