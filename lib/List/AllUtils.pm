@@ -3,7 +3,6 @@ package List::AllUtils;
 use strict;
 use warnings;
 
-our $VERSION = '0.02';
 
 # List::Util does not define an :all tag
 BEGIN
@@ -22,13 +21,11 @@ our %EXPORT_TAGS = ( all => \@EXPORT_OK );
 
 1;
 
+# ABSTRACT: Combines List::Util and List::MoreUtils in one bite-sized package
+
 __END__
 
 =pod
-
-=head1 NAME
-
-List::AllUtils - Combines List::Util and List::MoreUtils in one bite-sized package
 
 =head1 SYNOPSIS
 
@@ -481,25 +478,11 @@ C<List::Util> and C<List::MoreUtils>, obviously.
 Also see C<Util::Any>, which unifies many more util modules, and also
 lets you rename functions as part of the import.
 
-=head1 AUTHOR
-
-Dave Rolsky, C<< <autarch@urth.org> >>
-
-But really, this module does very little, and all the docs come from
-List::Util by Graham Barr and List::MoreUtils by Tassilo von Parseval.
-
 =head1 BUGS
 
 Please report any bugs or feature requests to
 C<bug-list-allutils@rt.cpan.org>, or through the web interface at
 L<http://rt.cpan.org>.  I will be notified, and then you'll
 automatically be notified of progress on your bug as I make changes.
-
-=head1 COPYRIGHT & LICENSE
-
-Copyright 2009 Dave Rolsky, All Rights Reserved.
-
-This program is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself.
 
 =cut
