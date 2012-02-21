@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.03    2012-02-21
+
 - Updated docs to match List::MoreUtils 0.28+. Reported by ilmari. RT #75196.
 
 
