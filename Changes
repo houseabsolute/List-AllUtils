@@ -1,3 +1,8 @@
+{{$$NEXT}
+
+- Updated docs to match List::MoreUtils 0.28+. Reported by ilmari. RT #75196.
+
+
 0.02   2009-09-12
 
 - Added a generated Makefile.PL. Fixes RT #48805.
