@@ -165,51 +165,53 @@ Returns a true value if any item in LIST meets the criterion given through
 BLOCK. Sets C<$_> for each item in LIST in turn:
 
     print "At least one value undefined"
-        if any { !defined($_) } @list;
+        if any { ! defined($_) } @list;
 
-Returns false otherwise, or C<undef> if LIST is empty.
+Returns false otherwise, or if LIST is empty.
 
 =head2 all BLOCK LIST
 
 Returns a true value if all items in LIST meet the criterion given through
-BLOCK. Sets C<$_> for each item in LIST in turn:
+BLOCK, or if LIST is empty. Sets C<$_> for each item in LIST in turn:
 
     print "All items defined"
         if all { defined($_) } @list;
 
-Returns false otherwise, or C<undef> if LIST is empty.
+Returns false otherwise.
 
 =head2 none BLOCK LIST
 
-Logically the negation of C<any>. Returns a true value if no item in LIST meets the
-criterion given through BLOCK. Sets C<$_> for each item in LIST in turn:
+Logically the negation of C<any>. Returns a true value if no item in LIST meets
+the criterion given through BLOCK, or if LIST is empty. Sets C<$_> for each item
+in LIST in turn:
 
     print "No value defined"
         if none { defined($_) } @list;
 
-Returns false otherwise, or C<undef> if LIST is empty.
+Returns false otherwise.
 
 =head2 notall BLOCK LIST
 
-Logically the negation of C<all>. Returns a true value if not all items in LIST meet
-the criterion given through BLOCK. Sets C<$_> for each item in LIST in turn:
+Logically the negation of C<all>. Returns a true value if not all items in LIST
+meet the criterion given through BLOCK. Sets C<$_> for each item in LIST in
+turn:
 
     print "Not all values defined"
         if notall { defined($_) } @list;
 
-Returns false otherwise, or C<undef> if LIST is empty.
+Returns false otherwise, or if LIST is empty.
 
 =head2 true BLOCK LIST
 
-Counts the number of elements in LIST for which the criterion in BLOCK is true. Sets C<$_> for 
-each item in LIST in turn:
+Counts the number of elements in LIST for which the criterion in BLOCK is true.
+Sets C<$_> for  each item in LIST in turn:
 
     printf "%i item(s) are defined", true { defined($_) } @list;
 
 =head2 false BLOCK LIST
 
-Counts the number of elements in LIST for which the criterion in BLOCK is false. Sets C<$_> for
-each item in LIST in turn:
+Counts the number of elements in LIST for which the criterion in BLOCK is false.
+Sets C<$_> for each item in LIST in turn:
 
     printf "%i item(s) are not defined", false { defined($_) } @list;
 
@@ -217,14 +219,14 @@ each item in LIST in turn:
 
 =head2 first_index BLOCK LIST
 
-Returns the index of the first element in LIST for which the criterion in BLOCK is true. Sets C<$_>
-for each item in LIST in turn:
+Returns the index of the first element in LIST for which the criterion in BLOCK
+is true. Sets C<$_> for each item in LIST in turn:
 
     my @list = (1, 4, 3, 2, 4, 6);
     printf "item with index %i in list is 4", firstidx { $_ == 4 } @list;
     __END__
     item with index 1 in list is 4
-
+    
 Returns C<-1> if no such item could be found.
 
 C<first_index> is an alias for C<firstidx>.
@@ -233,8 +235,8 @@ C<first_index> is an alias for C<firstidx>.
 
 =head2 last_index BLOCK LIST
 
-Returns the index of the last element in LIST for which the criterion in BLOCK is true. Sets C<$_>
-for each item in LIST in turn:
+Returns the index of the last element in LIST for which the criterion in BLOCK
+is true. Sets C<$_> for each item in LIST in turn:
 
     my @list = (1, 4, 3, 2, 4, 6);
     printf "item with index %i in list is 4", lastidx { $_ == 4 } @list;
@@ -247,8 +249,8 @@ C<last_index> is an alias for C<lastidx>.
 
 =head2 insert_after BLOCK VALUE LIST
 
-Inserts VALUE after the first item in LIST for which the criterion in BLOCK is true. Sets C<$_> for
-each item in LIST in turn.
+Inserts VALUE after the first item in LIST for which the criterion in BLOCK is
+true. Sets C<$_> for each item in LIST in turn.
 
     my @list = qw/This is a list/;
     insert_after { $_ eq "a" } "longer" => @list;
@@ -285,6 +287,15 @@ Think of it as syntactic sugar for
 
     for (my @mult = @list) { $_ *= 2 }
 
+=head2 before BLOCK LIST
+
+Returns a list of values of LIST upto (and not including) the point where BLOCK
+returns a true value. Sets C<$_> for each element in LIST in turn.
+
+=head2 before_incl BLOCK LIST
+
+Same as C<before> but also includes the element for which BLOCK is true.
+
 =head2 after BLOCK LIST
 
 Returns a list of the values of LIST after (and not including) the point
@@ -295,15 +306,6 @@ where BLOCK returns a true value. Sets C<$_> for each element in LIST in turn.
 =head2 after_incl BLOCK LIST
 
 Same as C<after> but also inclues the element for which BLOCK is true.
-
-=head2 before BLOCK LIST
-
-Returns a list of values of LIST upto (and not including) the point where BLOCK
-returns a true value. Sets C<$_> for each element in LIST in turn.
-
-=head2 before_incl BLOCK LIST
-
-Same as C<before> but also includes the element for which BLOCK is true.
 
 =head2 indexes BLOCK LIST
 
@@ -371,7 +373,7 @@ the index of the last fetched set of values, as a scalar.
 Like each_array, but the arguments are references to arrays, not the
 plain arrays.
 
-=head2 natatime BLOCK LIST
+=head2 natatime EXPR, LIST
 
 Creates an array iterator, for looping over an array in chunks of
 C<$n> items at a time.  (n at a time, get it?).  An example is
@@ -414,6 +416,8 @@ C<zip> is an alias for C<mesh>.
 
 =head2 uniq LIST
 
+=head2 distinct LIST
+
 Returns a new list by stripping duplicate values in LIST. The order of
 elements in the returned list is the same as in LIST. In scalar context,
 returns the number of unique elements in LIST.
@@ -424,22 +428,23 @@ returns the number of unique elements in LIST.
 =head2 minmax LIST
 
 Calculates the minimum and maximum of LIST and returns a two element list with
-the first element being the minimum and the second the maximum. Returns the empty
-list if LIST was empty.
+the first element being the minimum and the second the maximum. Returns the
+empty list if LIST was empty.
 
-The minmax algorithm differs from a naive iteration over the list where each element
-is compared to two values being the so far calculated min and max value in that it
-only requires 3n/2 - 2 comparisons. Thus it is the most efficient possible algorithm.
+The C<minmax> algorithm differs from a naive iteration over the list where each
+element is compared to two values being the so far calculated min and max value
+in that it only requires 3n/2 - 2 comparisons. Thus it is the most efficient
+possible algorithm.
 
 However, the Perl implementation of it has some overhead simply due to the fact
 that there are more lines of Perl code involved. Therefore, LIST needs to be
-fairly big in order for minmax to win over a naive implementation. This
+fairly big in order for C<minmax> to win over a naive implementation. This
 limitation does not apply to the XS version.
 
 =head2 part BLOCK LIST
 
-Partitions LIST based on the return value of BLOCK which denotes into which partition
-the current value is put.
+Partitions LIST based on the return value of BLOCK which denotes into which
+partition the current value is put.
 
 Returns a list of the partitions thusly created. Each partition created is a
 reference to an array.
@@ -460,9 +465,9 @@ Be careful with negative values, though:
 
 Negative values are only ok when they refer to a partition previously created:
 
-    my @idx = (0, 1, -1);
-    my $i = 0;
-    my @part = part { $idx[$i++ % 3] } 1 .. 8;	# [1, 4, 7], [2, 3, 5, 6, 8]
+    my @idx  = ( 0, 1, -1 );
+    my $i    = 0;
+    my @part = part { $idx[$++ % 3] } 1 .. 8; # [1, 4, 7], [2, 3, 5, 6, 8]
 
 =head1 EXPORTS
 
