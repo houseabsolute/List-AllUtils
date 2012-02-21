@@ -3,7 +3,6 @@ package List::AllUtils;
 use strict;
 use warnings;
 
-
 # List::Util does not define an :all tag
 BEGIN
 {
@@ -257,7 +256,7 @@ true. Sets C<$_> for each item in LIST in turn.
 
 =head2 insert_after_string STRING VALUE LIST
 
-Inserts VALUE after the first item in LIST which is equal to STRING. 
+Inserts VALUE after the first item in LIST which is equal to STRING.
 
     my @list = qw/This is a list/;
     insert_after_string "a", "longer" => @list;
