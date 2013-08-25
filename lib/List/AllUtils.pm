@@ -404,7 +404,7 @@ Think of it as syntactic sugar for
 
 =head2 before BLOCK LIST
 
-Returns a list of values of LIST upto (and not including) the point where BLOCK
+Returns a list of values of LIST up to (and not including) the point where BLOCK
 returns a true value. Sets C<$_> for each element in LIST in turn.
 
 =head2 before_incl BLOCK LIST
@@ -420,7 +420,7 @@ where BLOCK returns a true value. Sets C<$_> for each element in LIST in turn.
 
 =head2 after_incl BLOCK LIST
 
-Same as C<after> but also inclues the element for which BLOCK is true.
+Same as C<after> but also includes the element for which BLOCK is true.
 
 =head2 indexes BLOCK LIST
 
@@ -480,7 +480,7 @@ This is useful for looping over more than one array at once:
 
 The iterator returns the empty list when it reached the end of all arrays.
 
-If the iterator is passed an argument of 'C<index>', then it retuns
+If the iterator is passed an argument of 'C<index>', then it returns
 the index of the last fetched set of values, as a scalar.
 
 =head2 each_arrayref LIST
