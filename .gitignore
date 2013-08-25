@@ -1,12 +1,14 @@
 .\#*
 \#*\#
+*~
 blib*
 cover_db*
 Build
 _build
+.build
 MANIFEST
 META.yml
-Makefile.PL
+MYMETA.yml
 README
 Debian_CPANTS.txt
 Makefile.PL
