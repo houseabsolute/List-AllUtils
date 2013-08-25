@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- Updated to require List::Util 1.31, which includes a bunch of new pairwise
+  functions.
+
+
 0.03    2012-02-21
 
 - Updated docs to match List::MoreUtils 0.28+. Reported by ilmari. RT #75196.
