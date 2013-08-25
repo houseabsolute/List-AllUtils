@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.04    2013-08-25
+
 - Updated to require List::Util 1.31, which includes a bunch of new pairwise
   functions.
 
