@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- Really require List::Util 1.31, instead of just saying so in the
+  Changes. Reported by Przemysław Wesołek. RT #88296
+
+
 0.04    2013-08-25
 
 - Updated to require List::Util 1.31, which includes a bunch of new pairwise
