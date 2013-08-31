@@ -6,8 +6,7 @@ use warnings;
 # List::Util does not define an :all tag
 BEGIN
 {
-    require List::Util;
-    List::Util->VERSION(1.1);
+    use List::Util 1.31 ();
     List::Util->import( @List::Util::EXPORT_OK );
 }
 use List::MoreUtils 0.28 qw( :all );
