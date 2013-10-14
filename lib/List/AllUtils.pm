@@ -4,19 +4,22 @@ use strict;
 use warnings;
 
 # List::Util does not define an :all tag
-BEGIN
-{
+BEGIN {
     use List::Util 1.31 ();
-    List::Util->import( @List::Util::EXPORT_OK );
+    List::Util->import(@List::Util::EXPORT_OK);
+
+    use List::MoreUtils 0.28;
+
+    my %imported = map { $_ => 1 } @List::Util::EXPORT_OK;
+    List::MoreUtils->import( grep { !$imported{$_} }
+            @{ $List::MoreUtils::EXPORT_TAGS{':all'} } );
 }
-use List::MoreUtils 0.28 qw( :all );
 
 use base 'Exporter';
 
 our @EXPORT_OK = ( @List::Util::EXPORT_OK, @List::MoreUtils::EXPORT_OK );
 
 our %EXPORT_TAGS = ( all => \@EXPORT_OK );
-
 
 1;
 
