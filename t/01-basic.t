@@ -22,11 +22,12 @@ ok( !Foo->can('first'), 'no exports by default' );
 {
     package Bar;
 
-    use List::AllUtils qw( first any );
+    use List::AllUtils qw( first any apply );
 }
 
 ok( Bar->can('first'), 'explicitly import first' );
 ok( Bar->can('any'),   'explicitly import any' );
+ok( Bar->can('apply'), 'explicitly import apply' );
 ok( !Bar->can('all'),  'did not import all' );
 
 {
@@ -38,6 +39,7 @@ ok( !Bar->can('all'),  'did not import all' );
 ok( Baz->can('first'), 'imported everything, got first' );
 ok( Baz->can('any'),   'imported everything, got any' );
 ok( Baz->can('all'),   'imported everything, got all' );
+ok( Baz->can('apply'), 'imported everything, got apply' );
 
 is(
     ( List::AllUtils::first { $_ > 5 } ( 1, 2, 5, 22, 7 ) ),
