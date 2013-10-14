@@ -1,5 +1,11 @@
 {{$NEXT}}
 
+- List::Util 1.33 provides some subs that are also provided by
+  List::MoreUtils. This caused subroutine redefeined warnings. List::AllUtils
+  now only imports subs from List::MoreUtils that aren't defined by
+  List::Util. This works with List::Util 1.31+. Reported by Zefram. RT #89467.
+
+
 0.05    2013-08-30
 
 - Really require List::Util 1.31, instead of just saying so in the
