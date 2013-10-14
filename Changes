@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.07    2013-10-14
+
 - The last version totally broke all exports from List::MoreUtils. Now there
   are actual tests for this. Reported by Tatsuhiko Miyagawa. RT #89509.
 
