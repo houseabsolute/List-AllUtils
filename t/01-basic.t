@@ -1,7 +1,15 @@
 use strict;
 use warnings;
 
+# This is needed to produce sub redefined warnings from List::AllUtils when
+# List::Util and List::MoreUtils export some of the same subs. I'm not sure
+# why.
+BEGIN {
+    $^W++;
+}
+
 use Test::More 0.88;
+use Test::Warnings;
 
 {
     package Foo;
