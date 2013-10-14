@@ -4,7 +4,6 @@ use warnings;
 use Test::More 0.88;
 
 {
-
     package Foo;
 
     use List::AllUtils;
@@ -13,7 +12,6 @@ use Test::More 0.88;
 ok( !Foo->can('first'), 'no exports by default' );
 
 {
-
     package Bar;
 
     use List::AllUtils qw( first any );
@@ -24,7 +22,6 @@ ok( Bar->can('any'),   'explicitly import any' );
 ok( !Bar->can('all'),  'did not import all' );
 
 {
-
     package Baz;
 
     use List::AllUtils qw( :all );
