@@ -48,7 +48,7 @@ don't have to remember. This module will export all of the functions
 that either of those two modules defines.
 
 Note that all function documentation has been shamelessly copied from
-L<List::Util> and <List::MoreUtils>.
+L<List::Util> and L<List::MoreUtils>.
 
 =head1 LIST-REDUCTION FUNCTIONS
 
