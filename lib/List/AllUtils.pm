@@ -12,7 +12,7 @@ BEGIN {
 
     my %imported = map { $_ => 1 } @List::Util::EXPORT_OK;
     List::MoreUtils->import( grep { !$imported{$_} }
-            @{ $List::MoreUtils::EXPORT_TAGS{all} } );
+            @List::MoreUtils::EXPORT_OK );
 }
 
 use base 'Exporter';
