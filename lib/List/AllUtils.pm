@@ -581,7 +581,8 @@ Be careful with negative values, though:
     __END__
     Modification of non-creatable array value attempted, subscript -1 ...
 
-Negative values are only ok when they refer to a partition previously created:
+Negative values are only okay when they refer to a partition previously
+created:
 
     my @idx  = ( 0, 1, -1 );
     my $i    = 0;
