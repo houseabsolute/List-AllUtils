@@ -36,6 +36,7 @@ __END__
     # _Everything_ from List::Util and List::MoreUtils
     use List::AllUtils qw( :all );
 
+    my @numbers = ( 1, 2, 3, 5, 7 );
     # or don't import anything
     return List::AllUtils::first { $_ > 5 } @numbers;
 
