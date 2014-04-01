@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+- This version now works with both List::MoreUtils 0.28-0.33 and the latest
+  trial version, 0.400_006. Note that it does not work with earlier versions
+  of 0.400.
+
+
 0.07    2013-10-14
 
 - The last version totally broke all exports from List::MoreUtils. Now there
