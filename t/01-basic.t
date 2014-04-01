@@ -68,6 +68,7 @@ ok( Baz->can('first'), 'imported everything, got first' );
 ok( Baz->can('any'),   'imported everything, got any' );
 ok( Baz->can('all'),   'imported everything, got all' );
 ok( Baz->can('apply'), 'imported everything, got apply' );
+ok( Baz->can('uniq'),  'imported everything, got uniq' );
 
 is(
     Baz::test_first( 1, 2, 3 ),
