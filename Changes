@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.08    2014-04-01
+
 - This version now works with both List::MoreUtils 0.28-0.33 and the latest
   trial version, 0.400_006. Note that it does not work with earlier versions
   of 0.400.
