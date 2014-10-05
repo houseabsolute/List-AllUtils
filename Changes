@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.09    2014-10-05
+
 - Clarify which of List::Util and List::MoreUtils wins when they both provide
   the same function. Requested by Karen Etheridge. RT #98560.
 
