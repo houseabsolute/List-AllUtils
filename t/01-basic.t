@@ -93,4 +93,13 @@ ok(
     'explicitly calling List::AllUtils::any produces the correct result'
 );
 
+{
+    package ImportsAllSub;
+
+    use List::AllUtils qw( all );
+}
+
+ok( ImportsAllSub->can('all'),   'ImportsAllSub has all()' );
+ok( !ImportsAllSub->can('none'), 'ImportsAllSub does not have none()' );
+
 done_testing();
