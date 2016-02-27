@@ -11,6 +11,7 @@ BEGIN {
 use Test::More 0.88;
 use Test::Warnings;
 
+## no critic (Modules::ProhibitMultiplePackages)
 {
     package Foo;
 
