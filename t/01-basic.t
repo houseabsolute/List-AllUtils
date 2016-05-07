@@ -9,7 +9,12 @@ BEGIN {
 }
 
 use Test::More 0.88;
-use Test::Warnings;
+
+my @warnings;
+
+BEGIN {
+    $SIG{__WARN__} = sub { push @warnings, join q{}, @_ };
+}
 
 ## no critic (Modules::ProhibitMultiplePackages)
 {
@@ -102,5 +107,10 @@ ok(
 
 ok( ImportsAllSub->can('all'),   'ImportsAllSub has all()' );
 ok( !ImportsAllSub->can('none'), 'ImportsAllSub does not have none()' );
+
+ok(
+    ( !grep {/Overwriting existing sub 'List::AllUtils.+'/} @warnings ),
+    'no subroutines were redefined in List::AllUtils'
+) or diag(@warnings);
 
 done_testing();

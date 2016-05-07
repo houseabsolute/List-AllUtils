@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+- Make the test for subroutine redefined warnings much more
+  specific. Previously tests could fail because of totally unrelated warnings
+  from other modules. Reported by ribasushi. RT #113740.
+
+
 0.09    2014-10-05
 
 - Clarify which of List::Util and List::MoreUtils wins when they both provide
