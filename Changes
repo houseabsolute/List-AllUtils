@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+- Switched from List::MoreUtils to List::SomeUtils. This should not change any
+  functionality of the module.
+
 - Make the test for subroutine redefined warnings much more
   specific. Previously tests could fail because of totally unrelated warnings
   from other modules. Reported by ribasushi. RT #113740.
