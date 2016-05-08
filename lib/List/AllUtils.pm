@@ -3,7 +3,7 @@ package List::AllUtils;
 use strict;
 use warnings;
 
-our $VERSION = '0.10';
+our $VERSION = '0.11';
 
 # List::Util does not define an :all tag
 BEGIN {
