@@ -13,6 +13,7 @@ use Test::More 0.88;
 my @warnings;
 
 BEGIN {
+    ## no critic (Variables::RequireLocalizedPunctuationVars)
     $SIG{__WARN__} = sub { push @warnings, join q{}, @_ };
 }
 
