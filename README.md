@@ -1,16 +1,16 @@
 # NAME
 
-List::AllUtils - Combines List::Util and List::MoreUtils in one bite-sized package
+List::AllUtils - Combines List::Util and List::SomeUtils in one bite-sized package
 
 # VERSION
 
-version 0.09
+version 0.10
 
 # SYNOPSIS
 
     use List::AllUtils qw( first any );
 
-    # _Everything_ from List::Util and List::MoreUtils
+    # _Everything_ from List::Util and List::SomeUtils
     use List::AllUtils qw( :all );
 
     my @numbers = ( 1, 2, 3, 5, 7 );
@@ -20,20 +20,20 @@ version 0.09
 # DESCRIPTION
 
 Are you sick of trying to remember whether a particular helper is
-defined in [List::Util](https://metacpan.org/pod/List::Util) or [List::MoreUtils](https://metacpan.org/pod/List::MoreUtils)? I sure am. Now you
+defined in [List::Util](https://metacpan.org/pod/List::Util) or [List::SomeUtils](https://metacpan.org/pod/List::SomeUtils)? I sure am. Now you
 don't have to remember. This module will export all of the functions
 that either of those two modules defines.
 
 Note that all function documentation has been shamelessly copied from
-[List::Util](https://metacpan.org/pod/List::Util) and [List::MoreUtils](https://metacpan.org/pod/List::MoreUtils).
+[List::Util](https://metacpan.org/pod/List::Util) and [List::SomeUtils](https://metacpan.org/pod/List::SomeUtils).
 
 ## Which One Wins?
 
 Recently, [List::Util](https://metacpan.org/pod/List::Util) has started including some of the subs that used to
-only be in [List::MoreUtils](https://metacpan.org/pod/List::MoreUtils). This module always exports the version provided
+only be in [List::SomeUtils](https://metacpan.org/pod/List::SomeUtils). This module always exports the version provided
 by [List::Util](https://metacpan.org/pod/List::Util).
 
-The docs below come from [List::Util](https://metacpan.org/pod/List::Util) 1.31 and [List::MoreUtils](https://metacpan.org/pod/List::MoreUtils) 0.28.
+The docs below come from [List::Util](https://metacpan.org/pod/List::Util) 1.31 and [List::SomeUtils](https://metacpan.org/pod/List::SomeUtils) 0.50.
 
 # LIST-REDUCTION FUNCTIONS
 
@@ -256,121 +256,125 @@ Returns the elements of LIST in a random order
 
     @cards = shuffle 0..51      # 0..51 in a random order
 
-# List::MoreUtils FUNCTIONS
+# List::SomeUtils FUNCTIONS
 
-## any BLOCK LIST
+## Junctions
+
+### _Treatment of an empty list_
+
+There are two schools of thought for how to evaluate a junction on an
+empty list:
+
+- Reduction to an identity (boolean)
+- Result is undefined (three-valued)
+
+In the first case, the result of the junction applied to the empty list is
+determined by a mathematical reduction to an identity depending on whether
+the underlying comparison is "or" or "and". Conceptually:
+
+                    "any are true"      "all are true"
+                    --------------      --------------
+    2 elements:     A || B || 0         A && B && 1
+    1 element:      A || 0              A && 1
+    0 elements:     0                   1
+
+In the second case, three-value logic is desired, in which a junction applied
+to an empty list returns `undef` rather than true or false.
+
+Junctions with a `_u` suffix implement three-valued logic. Those
+without are boolean.
+
+### all BLOCK LIST
+
+### all\_u BLOCK LIST
+
+Returns a true value if all items in LIST meet the criterion given through
+BLOCK. Sets `$_` for each item in LIST in turn:
+
+    print "All values are non-negative"
+      if all { $_ >= 0 } ($x, $y, $z);
+
+For an empty LIST, `all` returns true (i.e. no values failed the condition)
+and `all_u` returns `undef`.
+
+Thus, `all_u(@list)` is equivalent to `@list ? all(@list) : undef`.
+
+**Note**: because Perl treats `undef` as false, you must check the return value
+of `all_u` with `defined` or you will get the opposite result of what you
+expect.
+
+### any BLOCK LIST
+
+### any\_u BLOCK LIST
 
 Returns a true value if any item in LIST meets the criterion given through
 BLOCK. Sets `$_` for each item in LIST in turn:
 
-    print "At least one value undefined"
-        if any { ! defined($_) } @list;
+    print "At least one non-negative value"
+      if any { $_ >= 0 } ($x, $y, $z);
 
-Returns false otherwise, or if LIST is empty.
+For an empty LIST, `any` returns false and `any_u` returns `undef`.
 
-## all BLOCK LIST
+Thus, `any_u(@list)` is equivalent to `@list ? any(@list) : undef`.
 
-Returns a true value if all items in LIST meet the criterion given through
-BLOCK, or if LIST is empty. Sets `$_` for each item in LIST in turn:
+### none BLOCK LIST
 
-    print "All items defined"
-        if all { defined($_) } @list;
-
-Returns false otherwise.
-
-## none BLOCK LIST
+### none\_u BLOCK LIST
 
 Logically the negation of `any`. Returns a true value if no item in LIST meets
-the criterion given through BLOCK, or if LIST is empty. Sets `$_` for each item
-in LIST in turn:
+the criterion given through BLOCK. Sets `$_` for each item in LIST in turn:
 
-    print "No value defined"
-        if none { defined($_) } @list;
+    print "No non-negative values"
+      if none { $_ >= 0 } ($x, $y, $z);
 
-Returns false otherwise.
+For an empty LIST, `none` returns true (i.e. no values failed the condition)
+and `none_u` returns `undef`.
 
-## notall BLOCK LIST
+Thus, `none_u(@list)` is equivalent to `@list ? none(@list) : undef`.
+
+**Note**: because Perl treats `undef` as false, you must check the return value
+of `none_u` with `defined` or you will get the opposite result of what you
+expect.
+
+### notall BLOCK LIST
+
+### notall\_u BLOCK LIST
 
 Logically the negation of `all`. Returns a true value if not all items in LIST
 meet the criterion given through BLOCK. Sets `$_` for each item in LIST in
 turn:
 
-    print "Not all values defined"
-        if notall { defined($_) } @list;
+    print "Not all values are non-negative"
+      if notall { $_ >= 0 } ($x, $y, $z);
 
-Returns false otherwise, or if LIST is empty.
+For an empty LIST, `notall` returns false and `notall_u` returns `undef`.
 
-## true BLOCK LIST
+Thus, `notall_u(@list)` is equivalent to `@list ? notall(@list) : undef`.
 
-Counts the number of elements in LIST for which the criterion in BLOCK is true.
-Sets `$_` for  each item in LIST in turn:
+### one BLOCK LIST
 
-    printf "%i item(s) are defined", true { defined($_) } @list;
+### one\_u BLOCK LIST
 
-## false BLOCK LIST
+Returns a true value if precisely one item in LIST meets the criterion
+given through BLOCK. Sets `$_` for each item in LIST in turn:
 
-Counts the number of elements in LIST for which the criterion in BLOCK is false.
-Sets `$_` for each item in LIST in turn:
+    print "Precisely one value defined"
+        if one { defined($_) } @list;
 
-    printf "%i item(s) are not defined", false { defined($_) } @list;
+Returns false otherwise.
 
-## firstidx BLOCK LIST
+For an empty LIST, `one` returns false and `one_u` returns `undef`.
 
-## first\_index BLOCK LIST
+The expression `one BLOCK LIST` is almost equivalent to
+`1 == true BLOCK LIST`, except for short-cutting.
+Evaluation of BLOCK will immediately stop at the second true value.
 
-Returns the index of the first element in LIST for which the criterion in BLOCK
-is true. Sets `$_` for each item in LIST in turn:
+## Transformation
 
-    my @list = (1, 4, 3, 2, 4, 6);
-    printf "item with index %i in list is 4", firstidx { $_ == 4 } @list;
-    __END__
-    item with index 1 in list is 4
-
-Returns `-1` if no such item could be found.
-
-`first_index` is an alias for `firstidx`.
-
-## lastidx BLOCK LIST
-
-## last\_index BLOCK LIST
-
-Returns the index of the last element in LIST for which the criterion in BLOCK
-is true. Sets `$_` for each item in LIST in turn:
-
-    my @list = (1, 4, 3, 2, 4, 6);
-    printf "item with index %i in list is 4", lastidx { $_ == 4 } @list;
-    __END__
-    item with index 4 in list is 4
-
-Returns `-1` if no such item could be found.
-
-`last_index` is an alias for `lastidx`.
-
-## insert\_after BLOCK VALUE LIST
-
-Inserts VALUE after the first item in LIST for which the criterion in BLOCK is
-true. Sets `$_` for each item in LIST in turn.
-
-    my @list = qw/This is a list/;
-    insert_after { $_ eq "a" } "longer" => @list;
-    print "@list";
-    __END__
-    This is a longer list
-
-## insert\_after\_string STRING VALUE LIST
-
-Inserts VALUE after the first item in LIST which is equal to STRING.
-
-    my @list = qw/This is a list/;
-    insert_after_string "a", "longer" => @list;
-    print "@list";
-    __END__
-    This is a longer list
-
-## apply BLOCK LIST
+### apply BLOCK LIST
 
 Applies BLOCK to each item in LIST and returns a list of the values after BLOCK
-has been applied. In scalar context, the last element is returned.  This
+has been applied. In scalar context, the last element is returned. This
 function is similar to `map` but will not modify the elements of the input
 list:
 
@@ -386,76 +390,152 @@ Think of it as syntactic sugar for
 
     for (my @mult = @list) { $_ *= 2 }
 
-## before BLOCK LIST
+### insert\_after BLOCK VALUE LIST
 
-Returns a list of values of LIST up to (and not including) the point where BLOCK
-returns a true value. Sets `$_` for each element in LIST in turn.
+Inserts VALUE after the first item in LIST for which the criterion in BLOCK is
+true. Sets `$_` for each item in LIST in turn.
 
-## before\_incl BLOCK LIST
+    my @list = qw/This is a list/;
+    insert_after { $_ eq "a" } "longer" => @list;
+    print "@list";
+    __END__
+    This is a longer list
 
-Same as `before` but also includes the element for which BLOCK is true.
+### insert\_after\_string STRING VALUE LIST
 
-## after BLOCK LIST
+Inserts VALUE after the first item in LIST which is equal to STRING.
+
+    my @list = qw/This is a list/;
+    insert_after_string "a", "longer" => @list;
+    print "@list";
+    __END__
+    This is a longer list
+
+### pairwise BLOCK ARRAY1 ARRAY2
+
+Evaluates BLOCK for each pair of elements in ARRAY1 and ARRAY2 and returns a
+new list consisting of BLOCK's return values. The two elements are set to `$a`
+and `$b`. Note that those two are aliases to the original value so changing
+them will modify the input arrays.
+
+    @a = (1 .. 5);
+    @b = (11 .. 15);
+    @x = pairwise { $a + $b } @a, @b;     # returns 12, 14, 16, 18, 20
+
+    # mesh with pairwise
+    @a = qw/a b c/;
+    @b = qw/1 2 3/;
+    @x = pairwise { ($a, $b) } @a, @b;    # returns a, 1, b, 2, c, 3
+
+### mesh ARRAY1 ARRAY2 \[ ARRAY3 ... \]
+
+### zip ARRAY1 ARRAY2 \[ ARRAY3 ... \]
+
+Returns a list consisting of the first elements of each array, then
+the second, then the third, etc, until all arrays are exhausted.
+
+Examples:
+
+    @x = qw/a b c d/;
+    @y = qw/1 2 3 4/;
+    @z = mesh @x, @y;         # returns a, 1, b, 2, c, 3, d, 4
+
+    @a = ('x');
+    @b = ('1', '2');
+    @c = qw/zip zap zot/;
+    @d = mesh @a, @b, @c;   # x, 1, zip, undef, 2, zap, undef, undef, zot
+
+`zip` is an alias for `mesh`.
+
+### uniq LIST
+
+### distinct LIST
+
+Returns a new list by stripping duplicate values in LIST by comparing
+the values as hash keys, except that undef is considered separate from ''.
+The order of elements in the returned list is the same as in LIST. In
+scalar context, returns the number of unique elements in LIST.
+
+    my @x = uniq 1, 1, 2, 2, 3, 5, 3, 4; # returns 1 2 3 5 4
+    my $x = uniq 1, 1, 2, 2, 3, 5, 3, 4; # returns 5
+    # returns "Mike", "Michael", "Richard", "Rick"
+    my @n = distinct "Mike", "Michael", "Richard", "Rick", "Michael", "Rick"
+    # returns '', 'S1', A5' and complains about "Use of uninitialized value"
+    my @s = distinct '', undef, 'S1', 'A5'
+    # returns undef, 'S1', A5' and complains about "Use of uninitialized value"
+    my @w = uniq undef, '', 'S1', 'A5'
+
+`distinct` is an alias for `uniq`.
+
+**RT#49800** can be used to give feedback about this behavior.
+
+### singleton
+
+Returns a new list by stripping values in LIST occurring more than once by
+comparing the values as hash keys, except that undef is considered separate
+from ''. The order of elements in the returned list is the same as in LIST.
+In scalar context, returns the number of elements occurring only once in LIST.
+
+    my @x = singleton 1,1,2,2,3,4,5 # returns 3 4 5
+
+## Partitioning
+
+### after BLOCK LIST
 
 Returns a list of the values of LIST after (and not including) the point
 where BLOCK returns a true value. Sets `$_` for each element in LIST in turn.
 
     @x = after { $_ % 5 == 0 } (1..9);    # returns 6, 7, 8, 9
 
-## after\_incl BLOCK LIST
+### after\_incl BLOCK LIST
 
 Same as `after` but also includes the element for which BLOCK is true.
 
-## indexes BLOCK LIST
+### before BLOCK LIST
 
-Evaluates BLOCK for each element in LIST (assigned to `$_`) and returns a list
-of the indices of those elements for which BLOCK returned a true value. This is
-just like `grep` only that it returns indices instead of values:
+Returns a list of values of LIST up to (and not including) the point where BLOCK
+returns a true value. Sets `$_` for each element in LIST in turn.
 
-    @x = indexes { $_ % 2 == 0 } (1..10);   # returns 1, 3, 5, 7, 9
+### before\_incl BLOCK LIST
 
-## firstval BLOCK LIST
+Same as `before` but also includes the element for which BLOCK is true.
 
-## first\_value BLOCK LIST
+### part BLOCK LIST
 
-Returns the first element in LIST for which BLOCK evaluates to true. Each
-element of LIST is set to `$_` in turn. Returns `undef` if no such element
-has been found.
+Partitions LIST based on the return value of BLOCK which denotes into which
+partition the current value is put.
 
-`first_val` is an alias for `firstval`.
+Returns a list of the partitions thusly created. Each partition created is a
+reference to an array.
 
-## lastval BLOCK LIST
+    my $i = 0;
+    my @part = part { $i++ % 2 } 1 .. 8;   # returns [1, 3, 5, 7], [2, 4, 6, 8]
 
-## last\_value BLOCK LIST
+You can have a sparse list of partitions as well where non-set partitions will
+be undef:
 
-Returns the last value in LIST for which BLOCK evaluates to true. Each element
-of LIST is set to `$_` in turn. Returns `undef` if no such element has been
-found.
+    my @part = part { 2 } 1 .. 10;            # returns undef, undef, [ 1 .. 10 ]
 
-`last_val` is an alias for `lastval`.
+Be careful with negative values, though:
 
-## pairwise BLOCK ARRAY1 ARRAY2
+    my @part = part { -1 } 1 .. 10;
+    __END__
+    Modification of non-creatable array value attempted, subscript -1 ...
 
-Evaluates BLOCK for each pair of elements in ARRAY1 and ARRAY2 and returns a
-new list consisting of BLOCK's return values. The two elements are set to `$a`
-and `$b`.  Note that those two are aliases to the original value so changing
-them will modify the input arrays.
+Negative values are only ok when they refer to a partition previously created:
 
-    @a = (1 .. 5);
-    @b = (11 .. 15);
-    @x = pairwise { $a + $b } @a, @b;   # returns 12, 14, 16, 18, 20
+    my @idx  = ( 0, 1, -1 );
+    my $i    = 0;
+    my @part = part { $idx[$++ % 3] } 1 .. 8; # [1, 4, 7], [2, 3, 5, 6, 8]
 
-    # mesh with pairwise
-    @a = qw/a b c/;
-    @b = qw/1 2 3/;
-    @x = pairwise { ($a, $b) } @a, @b;  # returns a, 1, b, 2, c, 3
+## Iteration
 
-## each\_array ARRAY1 ARRAY2 ...
+### each\_array ARRAY1 ARRAY2 ...
 
 Creates an array iterator to return the elements of the list of arrays ARRAY1,
-ARRAY2 throughout ARRAYn in turn.  That is, the first time it is called, it
-returns the first element of each array.  The next time, it returns the second
-elements.  And so on, until all elements are exhausted.
+ARRAY2 throughout ARRAYn in turn. That is, the first time it is called, it
+returns the first element of each array. The next time, it returns the second
+elements. And so on, until all elements are exhausted.
 
 This is useful for looping over more than one array at once:
 
@@ -467,15 +547,15 @@ The iterator returns the empty list when it reached the end of all arrays.
 If the iterator is passed an argument of '`index`', then it returns
 the index of the last fetched set of values, as a scalar.
 
-## each\_arrayref LIST
+### each\_arrayref LIST
 
 Like each\_array, but the arguments are references to arrays, not the
 plain arrays.
 
-## natatime EXPR, LIST
+### natatime EXPR, LIST
 
 Creates an array iterator, for looping over an array in chunks of
-`$n` items at a time.  (n at a time, get it?).  An example is
+`$n` items at a time. (n at a time, get it?). An example is
 probably a better explanation than I could give in words.
 
 Example:
@@ -484,7 +564,7 @@ Example:
     my $it = natatime 3, @x;
     while (my @vals = $it->())
     {
-        print "@vals\n";
+      print "@vals\n";
     }
 
 This prints
@@ -493,38 +573,194 @@ This prints
     d e f
     g
 
-## mesh ARRAY1 ARRAY2 \[ ARRAY3 ... \]
+## Searching
 
-## zip ARRAY1 ARRAY2 \[ ARRAY3 ... \]
+### bsearch BLOCK LIST
 
-Returns a list consisting of the first elements of each array, then
-the second, then the third, etc, until all arrays are exhausted.
+Performs a binary search on LIST which must be a sorted list of values. BLOCK
+must return a negative value if the current element (stored in `$_`) is smaller,
+a positive value if it is bigger and zero if it matches.
 
-Examples:
+Returns a boolean value in scalar context. In list context, it returns the element
+if it was found, otherwise the empty list.
 
-    @x = qw/a b c d/;
-    @y = qw/1 2 3 4/;
-    @z = mesh @x, @y;       # returns a, 1, b, 2, c, 3, d, 4
+### bsearchidx BLOCK LIST
 
-    @a = ('x');
-    @b = ('1', '2');
-    @c = qw/zip zap zot/;
-    @d = mesh @a, @b, @c;   # x, 1, zip, undef, 2, zap, undef, undef, zot
+### bsearch\_index BLOCK LIST
 
-`zip` is an alias for `mesh`.
+Performs a binary search on LIST which must be a sorted list of values. BLOCK
+must return a negative value if the current element (stored in `$_`) is smaller,
+a positive value if it is bigger and zero if it matches.
 
-## uniq LIST
+Returns the index of found element, otherwise `-1`.
 
-## distinct LIST
+`bsearch_index` is an alias for `bsearchidx`.
 
-Returns a new list by stripping duplicate values in LIST. The order of
-elements in the returned list is the same as in LIST. In scalar context,
-returns the number of unique elements in LIST.
+### firstval BLOCK LIST
 
-    my @x = uniq 1, 1, 2, 2, 3, 5, 3, 4; # returns 1 2 3 5 4
-    my $x = uniq 1, 1, 2, 2, 3, 5, 3, 4; # returns 5
+### first\_value BLOCK LIST
 
-## minmax LIST
+Returns the first element in LIST for which BLOCK evaluates to true. Each
+element of LIST is set to `$_` in turn. Returns `undef` if no such element
+has been found.
+
+`first_value` is an alias for `firstval`.
+
+### onlyval BLOCK LIST
+
+### only\_value BLOCK LIST
+
+Returns the only element in LIST for which BLOCK evaluates to true. Sets
+`$_` for each item in LIST in turn. Returns `undef` if no such element
+has been found.
+
+`only_value` is an alias for `onlyval`.
+
+### lastval BLOCK LIST
+
+### last\_value BLOCK LIST
+
+Returns the last value in LIST for which BLOCK evaluates to true. Each element
+of LIST is set to `$_` in turn. Returns `undef` if no such element has been
+found.
+
+`last_value` is an alias for `lastval`.
+
+### firstres BLOCK LIST
+
+### first\_result BLOCK LIST
+
+Returns the result of BLOCK for the first element in LIST for which BLOCK
+evaluates to true. Each element of LIST is set to `$_` in turn. Returns
+`undef` if no such element has been found.
+
+`first_result` is an alias for `firstres`.
+
+### onlyres BLOCK LIST
+
+### only\_result BLOCK LIST
+
+Returns the result of BLOCK for the first element in LIST for which BLOCK
+evaluates to true. Sets `$_` for each item in LIST in turn. Returns
+`undef` if no such element has been found.
+
+`only_result` is an alias for `onlyres`.
+
+### lastres BLOCK LIST
+
+### last\_result BLOCK LIST
+
+Returns the result of BLOCK for the last element in LIST for which BLOCK
+evaluates to true. Each element of LIST is set to `$_` in turn. Returns
+`undef` if no such element has been found.
+
+`last_result` is an alias for `lastres`.
+
+### indexes BLOCK LIST
+
+Evaluates BLOCK for each element in LIST (assigned to `$_`) and returns a list
+of the indices of those elements for which BLOCK returned a true value. This is
+just like `grep` only that it returns indices instead of values:
+
+    @x = indexes { $_ % 2 == 0 } (1..10);   # returns 1, 3, 5, 7, 9
+
+### firstidx BLOCK LIST
+
+### first\_index BLOCK LIST
+
+Returns the index of the first element in LIST for which the criterion in BLOCK
+is true. Sets `$_` for each item in LIST in turn:
+
+    my @list = (1, 4, 3, 2, 4, 6);
+    printf "item with index %i in list is 4", firstidx { $_ == 4 } @list;
+    __END__
+    item with index 1 in list is 4
+
+Returns `-1` if no such item could be found.
+
+`first_index` is an alias for `firstidx`.
+
+### onlyidx BLOCK LIST
+
+### only\_index BLOCK LIST
+
+Returns the index of the only element in LIST for which the criterion
+in BLOCK is true. Sets `$_` for each item in LIST in turn:
+
+    my @list = (1, 3, 4, 3, 2, 4);
+    printf "uniqe index of item 2 in list is %i", onlyidx { $_ == 2 } @list;
+    __END__
+    unique index of item 2 in list is 4
+
+Returns `-1` if either no such item or more than one of these
+has been found.
+
+`only_index` is an alias for `onlyidx`.
+
+### lastidx BLOCK LIST
+
+### last\_index BLOCK LIST
+
+Returns the index of the last element in LIST for which the criterion in BLOCK
+is true. Sets `$_` for each item in LIST in turn:
+
+    my @list = (1, 4, 3, 2, 4, 6);
+    printf "item with index %i in list is 4", lastidx { $_ == 4 } @list;
+    __END__
+    item with index 4 in list is 4
+
+Returns `-1` if no such item could be found.
+
+`last_index` is an alias for `lastidx`.
+
+## Sorting
+
+### sort\_by BLOCK LIST
+
+Returns the list of values sorted according to the string values returned by the
+KEYFUNC block or function. A typical use of this may be to sort objects according
+to the string value of some accessor, such as
+
+    sort_by { $_->name } @people
+
+The key function is called in scalar context, being passed each value in turn as
+both $\_ and the only argument in the parameters, @\_. The values are then sorted
+according to string comparisons on the values returned.
+This is equivalent to
+
+    sort { $a->name cmp $b->name } @people
+
+except that it guarantees the name accessor will be executed only once per value.
+One interesting use-case is to sort strings which may have numbers embedded in them
+"naturally", rather than lexically.
+
+    sort_by { s/(\d+)/sprintf "%09d", $1/eg; $_ } @strings
+
+This sorts strings by generating sort keys which zero-pad the embedded numbers to
+some level (9 digits in this case), helping to ensure the lexical sort puts them
+in the correct order.
+
+### nsort\_by BLOCK LIST
+
+Similar to sort\_by but compares its key values numerically.
+
+## Counting and calculation
+
+### true BLOCK LIST
+
+Counts the number of elements in LIST for which the criterion in BLOCK is true.
+Sets `$_` for  each item in LIST in turn:
+
+    printf "%i item(s) are defined", true { defined($_) } @list;
+
+### false BLOCK LIST
+
+Counts the number of elements in LIST for which the criterion in BLOCK is false.
+Sets `$_` for each item in LIST in turn:
+
+    printf "%i item(s) are not defined", false { defined($_) } @list;
+
+### minmax LIST
 
 Calculates the minimum and maximum of LIST and returns a two element list with
 the first element being the minimum and the second the maximum. Returns the
@@ -540,35 +776,6 @@ that there are more lines of Perl code involved. Therefore, LIST needs to be
 fairly big in order for `minmax` to win over a naive implementation. This
 limitation does not apply to the XS version.
 
-## part BLOCK LIST
-
-Partitions LIST based on the return value of BLOCK which denotes into which
-partition the current value is put.
-
-Returns a list of the partitions thusly created. Each partition created is a
-reference to an array.
-
-    my $i = 0;
-    my @part = part { $i++ % 2 } 1 .. 8;   # returns [1, 3, 5, 7], [2, 4, 6, 8]
-
-You can have a sparse list of partitions as well where non-set partitions will
-be undef:
-
-    my @part = part { 2 } 1 .. 10;          # returns undef, undef, [ 1 .. 10 ]
-
-Be careful with negative values, though:
-
-    my @part = part { -1 } 1 .. 10;
-    __END__
-    Modification of non-creatable array value attempted, subscript -1 ...
-
-Negative values are only okay when they refer to a partition previously
-created:
-
-    my @idx  = ( 0, 1, -1 );
-    my $i    = 0;
-    my @part = part { $idx[$++ % 3] } 1 .. 8; # [1, 4, 7], [2, 3, 5, 6, 8]
-
 # EXPORTS
 
 This module exports nothing by default. You can import functions by
@@ -576,7 +783,7 @@ name, or get everything with the `:all` tag.
 
 # SEE ALSO
 
-`List::Util` and `List::MoreUtils`, obviously.
+`List::Util` and `List::SomeUtils`, obviously.
 
 Also see `Util::Any`, which unifies many more util modules, and also
 lets you rename functions as part of the import.
@@ -588,13 +795,39 @@ Please report any bugs or feature requests to
 [http://rt.cpan.org](http://rt.cpan.org).  I will be notified, and then you'll
 automatically be notified of progress on your bug as I make changes.
 
+Bugs may be submitted through [the RT bug tracker](http://rt.cpan.org/Public/Dist/Display.html?Name=List-AllUtils)
+(or [bug-list-allutils@rt.cpan.org](mailto:bug-list-allutils@rt.cpan.org)).
+
+I am also usually active on IRC as 'drolsky' on `irc://irc.perl.org`.
+
+# DONATIONS
+
+If you'd like to thank me for the work I've done on this module, please
+consider making a "donation" to me via PayPal. I spend a lot of free time
+creating free software, and would appreciate any support you'd care to offer.
+
+Please note that **I am not suggesting that you must do this** in order for me
+to continue working on this particular software. I will continue to do so,
+inasmuch as I have in the past, for as long as it interests me.
+
+Similarly, a donation made in this way will probably not make me work on this
+software much more, unless I get so many donations that I can consider working
+on free software full time (let's all have a chuckle at that together).
+
+To donate, log into PayPal and send money to autarch@urth.org, or use the
+button at [http://www.urth.org/~autarch/fs-donation.html](http://www.urth.org/~autarch/fs-donation.html).
+
 # AUTHOR
 
-Dave Rolsky <autarch@urth.org>
+Dave Rolsky &lt;autarch@urth.org>
 
-# COPYRIGHT AND LICENSE
+# CONTRIBUTOR
 
-This software is Copyright (c) 2014 by Dave Rolsky.
+Ricardo Signes &lt;rjbs@cpan.org>
+
+# COPYRIGHT AND LICENCE
+
+This software is Copyright (c) 2016 by Dave Rolsky.
 
 This is free software, licensed under:
 
