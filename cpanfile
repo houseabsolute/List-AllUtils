@@ -30,7 +30,6 @@ on 'develop' => sub {
   requires "Pod::Wordlist" => "0";
   requires "Test::CPAN::Changes" => "0.19";
   requires "Test::CPAN::Meta::JSON" => "0.16";
-  requires "Test::CleanNamespaces" => "0.15";
   requires "Test::Code::TidyAll" => "0.24";
   requires "Test::DependentModules" => "0";
   requires "Test::EOL" => "0";

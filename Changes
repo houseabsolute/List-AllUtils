@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.10    2016-05-08
+
 - Switched from List::MoreUtils to List::SomeUtils. This should not change any
   functionality of the module.
 
