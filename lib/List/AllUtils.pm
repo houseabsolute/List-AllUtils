@@ -48,6 +48,23 @@ our %ALL_EXPORTS = (
             only_value
             only_result
         /},
+    'List::UtilsBy' => { map { $_ => 0 } qw/
+        rev_sort_by
+        rev_nsort_by
+        max_by
+        nmax_by
+        min_by
+        nmin_by
+        uniq_by
+        partition_by
+        count_by
+        zip_by
+        unzip_by
+        extract_by
+        extract_first_by
+        weighted_shuffle_by
+        bundle_by
+    /},
 );
 
 # also have them indexed by function
