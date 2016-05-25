@@ -76,6 +76,7 @@ ok( Baz->can('any'),   'imported everything, got any' );
 ok( Baz->can('all'),   'imported everything, got all' );
 ok( Baz->can('apply'), 'imported everything, got apply' );
 ok( Baz->can('uniq'),  'imported everything, got uniq' );
+ok( Baz->can('uniq_by'),  'imported everything, got uniq_by from UtilsBy' );
 
 is(
     Baz::test_first( 1, 2, 3 ),
