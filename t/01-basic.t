@@ -89,17 +89,6 @@ is_deeply(
     'Baz::test_apply returns expected list'
 );
 
-is(
-    ( List::AllUtils::first { $_ > 5 } ( 1, 2, 5, 22, 7 ) ),
-    22,
-    'explicitly calling List::AllUtils::first produces the correct result'
-);
-
-ok(
-    ( List::AllUtils::any { $_ > 5 } ( 1, 2, 5, 22, 7 ) ),
-    'explicitly calling List::AllUtils::any produces the correct result'
-);
-
 {
     package ImportsAllSub;
 

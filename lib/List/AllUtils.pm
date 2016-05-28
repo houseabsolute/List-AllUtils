@@ -5,23 +5,85 @@ use warnings;
 
 our $VERSION = '0.11';
 
-# List::Util does not define an :all tag
-BEGIN {
-    use List::Util 1.31 ();
-    List::Util->import(@List::Util::EXPORT_OK);
+use Module::Runtime qw/ use_module /;
 
-    use List::SomeUtils 0.50;
+use parent 'Exporter::Tiny';
 
-    my %imported = map { $_ => 1 } @List::Util::EXPORT_OK;
-    List::SomeUtils->import( grep { !$imported{$_} }
-            @List::SomeUtils::EXPORT_OK );
+our %ALL_EXPORTS = (
+    'List::Util' => {
+        ( map { $_ => 1.45 } qw/ uniq uniqstr / ),
+        ( map { $_ => 1.44 } qw/ uniqnum / ),
+        ( map { $_ => 1.42 } qw/ unpairs / ),
+        ( map { $_ => 1.35 } qw/ product / ),
+        ( map { $_ => 1.33 } qw/ any all none notall/ ),
+        ( map { $_ => 1.30 } qw/ pairfirst / ),
+        ( map { $_ => 1.29 } qw/ pairs pairkeys pairvalues pairmap pairgrep / ),
+        ( map { $_ => 1.26 } qw/ sum0 / ),
+        map { $_ => 0 } qw/
+            reduce first max maxstr min minstr sum shuffle
+        /
+    },
+    'List::SomeUtils' => { map { $_ => 0 } qw/
+            true false firstidx lastidx
+            insert_after insert_after_string
+            apply indexes after after_incl before before_incl
+            firstval lastval each_array each_arrayref
+            pairwise natatime
+            mesh 
+            minmax part
+            bsearch
+            sort_by nsort_by
+            one any_u all_u none_u notall_u one_u
+            firstres onlyidx onlyval onlyres lastres
+            singleton bsearchidx
+            last_value
+            zip
+            last_result
+            bsearch_index
+            last_index
+            only_index
+            distinct first_result first_index
+            first_value
+            distinct
+            only_value
+            only_result
+        /},
+);
+
+# also have them indexed by function
+our %EXPORTED_FUNCTIONS;
+
+for my $module ( keys %ALL_EXPORTS ) {
+    for my $function ( keys %{ $ALL_EXPORTS{$module} } ) {
+        $EXPORTED_FUNCTIONS{$function}{$module}= $ALL_EXPORTS{$module}{$function};
+    }
 }
 
-use base 'Exporter';
+sub _exporter_expand_tag {
+    my( $self, $tag ) = @_;
 
-our @EXPORT_OK = ( @List::Util::EXPORT_OK, @List::SomeUtils::EXPORT_OK );
+    return unless $tag eq 'all';
 
-our %EXPORT_TAGS = ( all => \@EXPORT_OK );
+    return map { [ $_ => { } ] } keys %EXPORTED_FUNCTIONS;
+}
+
+sub _exporter_expand_sub {
+    my( $self, $function ) = @_;
+
+    my $source = $EXPORTED_FUNCTIONS{$function}
+        or die "function '$function' is not exported by List::AllUtils\n";
+
+    my( $module, $version ) = %$source;
+
+    eval { use_module( $module, $version ) }
+        or die "module $module v$version required to use '$function'\n";
+
+    my $orig = $module . '::'. $function;
+
+    return $function => eval '\&'.$orig;
+
+}
+
 
 1;
 
