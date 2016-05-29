@@ -10,13 +10,14 @@ use experimental qw/ postderef /;
 use List::AllUtils;
 use Module::Runtime qw/ use_module /;
 
+## no critic ( InputOutput::RequireCheckedSyscalls BuiltinFunctions::ProhibitStringyEval )
 
 for my $module ( keys %List::AllUtils::ALL_EXPORTS ) {
-    use_module( $module );
+    use_module($module);
 
-    say "## ", $module;
+    say '## ', $module;
 
-    for my $function ( eval '@'.$module.'::EXPORT_OK' ) {
+    for my $function ( eval '@' . $module . '::EXPORT_OK' ) {
         my $f = $List::AllUtils::EXPORTED_FUNCTIONS{$function} or do {
             say "we're missing $function";
             next;

@@ -1,4 +1,4 @@
-# generate the prototypes for the main module 
+# generate the prototypes for the main module
 
 use strict;
 use warnings;
@@ -13,11 +13,13 @@ use List::Util;
 use List::SomeUtils;
 use List::UtilsBy;
 
+## no critic ( BuiltinFunctions::ProhibitStringyEval InputOutput::RequireCheckedSyscalls )
+
 my %protos;
 for my $function ( keys %List::AllUtils::EXPORTED_FUNCTIONS ) {
-    my( $module ) = $List::AllUtils::EXPORTED_FUNCTIONS{$function}->@*;
+    my ($module) = $List::AllUtils::EXPORTED_FUNCTIONS{$function}->@*;
     $protos{$function} = eval "prototype '${module}::$function'";
 }
 
-say Dumper(\%protos);
+say Dumper( \%protos );
 
