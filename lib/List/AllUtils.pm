@@ -261,7 +261,7 @@ Recently, L<List::Util> has started including some of the subs that used to
 only be in L<List::SomeUtils>. This module always favors the version provided
 by L<List::Util>, L<List::SomeUtils> or L<List::UtilsBy> in that order.
 
-The docs below come from L<List::Util> 1.31,  L<List::SomeUtils> 0.50, 
+The docs below come from L<List::Util> 1.31,  L<List::SomeUtils> 0.50,
 and L<List::UtilsBy> 0.10.
 
 =head2 Table available functions
@@ -270,35 +270,35 @@ and L<List::UtilsBy> 0.10.
     -----------------|-----------------------|---------------------
       reduce             all                      rev_sort_by
       any                all_u                    rev_nsort_by
-      all                any                      
+      all                any
       none               any_u                    max_by
       notall             none                     min_by
-      first              none_u                   
+      first              none_u
       max                notall                   uniq_by
-      maxstr             notall_u                                     
+      maxstr             notall_u
       min                one                      partition_by
       minstr             one_u                    count_by
-      product                                                         
+      product
       sum                apply                    zip_by
       sum0               insert_after             unzip_by
-                         insert_after_string                          
+                         insert_after_string
       pairs              pairwise                 extract_by
       unpairs            mesh                     extract_first_by
-      pairkeys           zip                                          
+      pairkeys           zip
       pairvalues         uniq                     weighted_shuffle_by
-      pairgrep           distinct                                     
+      pairgrep           distinct
       pairfirst          singleton                bundle_by
-      pairmap                   
-                         after                    
+      pairmap
+                         after
       shuffle            after_incl
-      uniq               before 
-      uniqnum            before_incl                              
-      uniqstr            part 
-                                
+      uniq               before
+      uniqnum            before_incl
+      uniqstr            part
+
                          each_array
                          each_arrayref
                          natatime
-                                
+
                          bsearch
                          bsearchidx
                          bsearch_index
@@ -307,15 +307,15 @@ and L<List::UtilsBy> 0.10.
                          onlyval
                          only_value
                          lastval
-                         last_value 
+                         last_value
                          firstresult
-                         first_result 
+                         first_result
                          onlyres
-                         only_result 
-                         lastres  
+                         only_result
+                         lastres
                          last_result
-                         indexes  
-                         firstidx 
+                         indexes
+                         firstidx
                          first_index
                          onlyidx
                          only_index
@@ -324,10 +324,10 @@ and L<List::UtilsBy> 0.10.
 
                          sort_by
                          nsort_by
-                                 
-                         true    
-                         false 
-                         minmax 
+
+                         true
+                         false
+                         minmax
 
 
 =head1 LIST-REDUCTION FUNCTIONS
