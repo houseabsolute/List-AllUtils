@@ -5,8 +5,11 @@ use 5.10.0;
 use strict;
 use warnings;
 
+use experimental qw/ postderef /;
+
 use List::AllUtils;
 use Module::Runtime qw/ use_module /;
+
 
 for my $module ( keys %List::AllUtils::ALL_EXPORTS ) {
     use_module( $module );
@@ -18,7 +21,7 @@ for my $module ( keys %List::AllUtils::ALL_EXPORTS ) {
             say "we're missing $function";
             next;
         };
-        my ($source) = keys %$f;
+        my ($source) = @$f;
         say "using $source\'s $function" if $source ne $module;
     }
 

@@ -1,4 +1,5 @@
 package List::AllUtils;
+# ABSTRACT: Combines List::Util, List::SomeUtils and List::UtilsBy in one bite-sized package
 
 use strict;
 use warnings;
@@ -9,6 +10,7 @@ use Module::Runtime qw/ use_module /;
 
 use parent 'Exporter::Tiny';
 
+# $ALL_EXPORTS{$module}{$function} = $version
 our %ALL_EXPORTS = (
     'List::Util' => {
         ( map { $_ => 1.45 } qw/ uniq uniqstr / ),
@@ -67,12 +69,106 @@ our %ALL_EXPORTS = (
     /},
 );
 
-# also have them indexed by function
+our %PROTOTYPES = (
+              'before' => '&@',
+                        'first_index' => '&@',
+                                  'partition_by' => '&@',
+                                            'uniq' => '@',
+                                                      'natatime' => '$@',
+                                                                'all_u' => '&@',
+                                                                          'sum' => '@',
+                                                                                    'maxstr' => '@',
+                                                                                              'after_incl' => '&@',
+                                                                                                        'each_array' => '\\@;\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@',
+                                                                                                                  'none_u' => '&@',
+                                                                                                                  'last_value' => '&@',
+                                                                                                                  'zip_by' => '&@',
+                                                                                                                  'one' => '&@',
+                                                                                                                  'pairkeys' => '@',
+                                                                                                                  'pairs' => '@',
+                                                                                                                  'true' => '&@',
+                                                                                                                  'pairwise' => '&\\@\\@',
+                                                                                                                  'uniqnum' => '@',
+                                                                                                                  'max_by' => '&@',
+                                                                                                                  'firstval' => '&@',
+                                                                                                                  'only_index' => '&@',
+                                                                                                                  'mesh' => '\\@\\@;\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@',
+                                                                                                                  'first' => '&@',
+                                                                                                                  'lastidx' => '&@',
+                                                                                                                  'indexes' => '&@',
+                                                                                                                  'pairvalues' => '@',
+                                                                                                                  'last_index' => '&@',
+                                                                                                                  'any' => '&@',
+                                                                                                                  'any_u' => '&@',
+                                                                                                                  'insert_after_string' => '$$\\@',
+                                                                                                                  'first_value' => '&@',
+                                                                                                                  'sort_by' => '&@',
+                                                                                                                  'product' => '@',
+                                                                                                                  'minstr' => '@',
+                                                                                                                  'pairgrep' => '&@',
+                                                                                                                  'pairfirst' => '&@',
+                                                                                                                  'lastres' => '&@',
+                                                                                                                  'only_value' => '&@',
+                                                                                                                  'extract_first_by' => '&\\@',
+                                                                                                                  'onlyval' => '&@',
+                                                                                                                  'apply' => '&@',
+                                                                                                                  'each_arrayref' => undef,
+                                                                                                                  'notall_u' => '&@',
+                                                                                                                  'onlyidx' => '&@',
+                                                                                                                  'nmax_by' => '&@',
+                                                                                                                  'insert_after' => '&$\\@',
+                                                                                                                  'one_u' => '&@',
+                                                                                                                  'onlyres' => '&@',
+                                                                                                                  'min_by' => '&@',
+                                                                                                                  'uniq_by' => '&@',
+                                                                                                                  'count_by' => '&@',
+                                                                                                                  'pairmap' => '&@',
+                                                                                                                  'zip' => '\\@\\@;\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@\\@',
+                                                                                                                  'rev_sort_by' => '&@',
+                                                                                                                  'lastval' => '&@',
+                                                                                                                  'bsearch_index' => '&@',
+                                                                                                                  'bsearchidx' => '&@',
+                                                                                                                  'false' => '&@',
+                                                                                                                  'reduce' => '&@',
+                                                                                                                  'distinct' => '@',
+                                                                                                                  'notall' => '&@',
+                                                                                                                  'min' => '@',
+                                                                                                                  'sum0' => '@',
+                                                                                                                  'part' => '&@',
+                                                                                                                  'nmin_by' => '&@',
+                                                                                                                  'none' => '&@',
+                                                                                                                  'uniqstr' => '@',
+                                                                                                                  'firstidx' => '&@',
+                                                                                                                  'nsort_by' => '&@',
+                                                                                                                  'max' => '@',
+                                                                                                                  'last_result' => '&@',
+                                                                                                                  'only_result' => '&@',
+                                                                                                                  'before_incl' => '&@',
+                                                                                                                  'minmax' => '@',
+                                                                                                                  'first_result' => '&@',
+                                                                                                                  'bsearch' => '&@',
+                                                                                                                  'shuffle' => '@',
+                                                                                                                  'after' => '&@',
+                                                                                                                  'all' => '&@',
+                                                                                                                  'weighted_shuffle_by' => '&@',
+                                                                                                                  'unpairs' => '@',
+                                                                                                                  'bundle_by' => '&@',
+                                                                                                                  'rev_nsort_by' => '&@',
+                                                                                                                  'unzip_by' => '&@',
+                                                                                                                  'firstres' => '&@',
+                                                                                                                  'singleton' => '@',
+                                                                                                                  'extract_by' => '&\\@'
+                                                                                                                );
+
+# the main structure where we mash everything together
+# $EXPORTED_FUNCTIONS{$function}{$module} = [ $module, $min_version, $prototype ]
 our %EXPORTED_FUNCTIONS;
 
 for my $module ( keys %ALL_EXPORTS ) {
     for my $function ( keys %{ $ALL_EXPORTS{$module} } ) {
-        $EXPORTED_FUNCTIONS{$function}{$module}= $ALL_EXPORTS{$module}{$function};
+        $EXPORTED_FUNCTIONS{$function} = [ $module, $ALL_EXPORTS{$module}{$function},
+            $PROTOTYPES{$function}
+        ];
     }
 }
 
@@ -90,7 +186,7 @@ sub _exporter_expand_sub {
     my $source = $EXPORTED_FUNCTIONS{$function}
         or die "function '$function' is not exported by List::AllUtils\n";
 
-    my( $module, $version ) = %$source;
+    my( $module, $version ) = @$source;
 
     eval { use_module( $module, $version ) }
         or die "module $module v$version required to use '$function'\n";
@@ -101,10 +197,18 @@ sub _exporter_expand_sub {
 
 }
 
+# we want the functions to be living in the L::AU namespace as well, in case
+# they are called directly
+for my $function ( keys %EXPORTED_FUNCTIONS ) {
+    my( $module, undef, $proto )=  @{  $EXPORTED_FUNCTIONS{$function} };
+    $proto ||= '';
+
+    eval qq{
+        sub $function ($proto) { use_module('$module'); goto &${module}::$function; }
+    };
+}
 
 1;
-
-# ABSTRACT: Combines List::Util, List::SomeUtils and List::UtilsBy in one bite-sized package
 
 __END__
 
