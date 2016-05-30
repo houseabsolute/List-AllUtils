@@ -71,11 +71,17 @@ is_deeply(
     }
 }
 
-ok( Baz->can('first'), 'imported everything, got first' );
-ok( Baz->can('any'),   'imported everything, got any' );
-ok( Baz->can('all'),   'imported everything, got all' );
-ok( Baz->can('apply'), 'imported everything, got apply' );
-ok( Baz->can('uniq'),  'imported everything, got uniq' );
+ok( Baz->can('first'),   'imported everything, got first' );
+ok( Baz->can('any'),     'imported everything, got any' );
+ok( Baz->can('all'),     'imported everything, got all' );
+ok( Baz->can('apply'),   'imported everything, got apply' );
+if( eval "$List::SomeUtils::VERSION" > 1.45 ) {
+    ok( Baz->can('uniq'),    'imported everything, got uniq' );
+}
+
+if( eval "$List::UtilsBy::VERSION" > 0 ) {
+    ok( Baz->can('uniq_by'), 'imported everything, got uniq_by from UtilsBy' );
+}
 
 is(
     Baz::test_first( 1, 2, 3 ),
@@ -113,5 +119,12 @@ ok(
     ( !grep {/Overwriting existing sub 'List::AllUtils.+'/} @warnings ),
     'no subroutines were redefined in List::AllUtils'
 ) or diag(@warnings);
+
+# we fake a version of List::Util from the future
+$List::AllUtils::EXPORTED_FUNCTIONS{quux} = [ 'List::Util', 999.99 ];
+
+eval "use List::AllUtils  qw/ quux /;";
+
+like $@,  qr/module .* v.* required to use 'quux'/, "importing a function not available throws an informative message";
 
 done_testing();
