@@ -186,14 +186,25 @@ for my $module ( keys %ALL_EXPORTS ) {
         ];
     }
 }
-## no critic ( Subroutines::ProhibitUnusedPrivateSubroutines )
+## no critic ( Subroutines::ProhibitUnusedPrivateSubroutines BuiltinFunctions::ProhibitStringyEval)
 
 sub _exporter_expand_tag {
     my ( $self, $tag ) = @_;
 
     return unless $tag eq 'all';
 
-    return map { [ $_ => {} ] } keys %EXPORTED_FUNCTIONS;
+    # check what 'all' means in function of what is available
+    # on this system
+    return map { [ $_ => {} ] }
+        grep {
+              $EXPORTED_FUNCTIONS{$_}[1] <= eval '$'
+            . $EXPORTED_FUNCTIONS{$_}[0]
+            . '::VERSION'
+        }
+        grep {
+        eval { use_module( $EXPORTED_FUNCTIONS{$_}[0] ) }
+        }
+        keys %EXPORTED_FUNCTIONS;
 }
 
 sub _exporter_expand_sub {
