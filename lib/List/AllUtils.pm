@@ -10,13 +10,18 @@ BEGIN {
     use List::Util 1.45 ();
     List::Util->import(@List::Util::EXPORT_OK);
 
-    use List::SomeUtils 0.50;
+    use List::SomeUtils 0.50 ();
 
-    use List::UtilsBy 0.10;
+    use List::UtilsBy 0.10 ();
 
     my %imported = map { $_ => 1 } @List::Util::EXPORT_OK;
     List::SomeUtils->import( grep { !$imported{$_} }
             @List::SomeUtils::EXPORT_OK );
+
+    %imported = map { $_ => 1 } @List::Util::EXPORT_OK,
+        @List::SomeUtils::EXPORT_OK;
+    List::ByUtils->import( grep { !$imported{$_} }
+            @List::ByUtils::EXPORT_OK );
 }
 
 use base 'Exporter';
