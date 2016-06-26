@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- Added List::UtilsBy to the list of included modules. Based on a patch from
+  Yanick Champoux. GH #3.
+
+
 0.10    2016-05-08
 
 - Switched from List::MoreUtils to List::SomeUtils. This should not change any
