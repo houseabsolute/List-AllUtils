@@ -8,7 +8,7 @@ BEGIN {
     $^W++;
 }
 
-use Test::More 0.88;
+use Test::More;
 
 my @warnings;
 
