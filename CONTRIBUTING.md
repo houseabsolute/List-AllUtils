@@ -100,6 +100,11 @@ can submit an issue report [via the web](http://rt.cpan.org/Public/Dist/Display.
 or [via email](bug-list-allutils@rt.cpan.org.
 This is a good place to send your questions about the usage of this distribution.
 
+## Travis
+
+All pull requests for this distribution will be automatically tested by
+[Travis](https://travis-ci.org/) and the build status will be reported on the
+pull request page. If your build fails, please take a look at the output.
 
 ## Tidyall
 
@@ -122,5 +127,5 @@ commit or patch), unless you specifically request for it not to be. If you
 wish to be listed under a different name or address, you should submit a pull
 request to the .mailmap file to contain the correct mapping.
 
-This file was generated via Dist::Zilla::Plugin::GenerateFile::FromShareDir 0.009 from a
-template file originating in Dist-Zilla-PluginBundle-DROLSKY-0.53.
+This file was generated via Dist::Zilla::Plugin::GenerateFile::FromShareDir 0.012 from a
+template file originating in Dist-Zilla-PluginBundle-DROLSKY-0.64.

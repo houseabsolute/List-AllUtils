@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.11    2016-06-26
+
 - Added List::UtilsBy to the list of included modules. Based on a patch from
   Yanick Champoux. GH #3.
 

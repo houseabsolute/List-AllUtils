@@ -1,6 +1,7 @@
 requires "Exporter" => "0";
 requires "List::SomeUtils" => "0.50";
-requires "List::Util" => "1.31";
+requires "List::Util" => "1.45";
+requires "List::UtilsBy" => "0.10";
 requires "base" => "0";
 requires "strict" => "0";
 requires "warnings" => "0";
@@ -20,6 +21,7 @@ on 'configure' => sub {
 };
 
 on 'develop' => sub {
+  requires "Code::TidyAll::Plugin::Test::Vars" => "0.02";
   requires "Cwd" => "0";
   requires "File::Spec" => "0";
   requires "IO::Handle" => "0";
@@ -40,8 +42,10 @@ on 'develop' => sub {
   requires "Test::Pod::Coverage" => "1.08";
   requires "Test::Pod::LinkCheck" => "0";
   requires "Test::Pod::No404s" => "0";
+  requires "Test::Portability::Files" => "0";
   requires "Test::Spelling" => "0.12";
   requires "Test::Synopsis" => "0";
+  requires "Test::Vars" => "0.009";
   requires "Test::Version" => "1";
   requires "blib" => "1.01";
   requires "perl" => "5.006";

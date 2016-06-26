@@ -1,16 +1,16 @@
 # NAME
 
-List::AllUtils - Combines List::Util and List::SomeUtils in one bite-sized package
+List::AllUtils - Combines List::Util, List::SomeUtils and List::UtilsBy in one bite-sized package
 
 # VERSION
 
-version 0.10
+version 0.11
 
 # SYNOPSIS
 
     use List::AllUtils qw( first any );
 
-    # _Everything_ from List::Util and List::SomeUtils
+    # _Everything_ from List::Util, List::SomeUtils, and List::UtilsBy
     use List::AllUtils qw( :all );
 
     my @numbers = ( 1, 2, 3, 5, 7 );
@@ -20,20 +20,23 @@ version 0.10
 # DESCRIPTION
 
 Are you sick of trying to remember whether a particular helper is
-defined in [List::Util](https://metacpan.org/pod/List::Util) or [List::SomeUtils](https://metacpan.org/pod/List::SomeUtils)? I sure am. Now you
+defined in [List::Util](https://metacpan.org/pod/List::Util),  [List::SomeUtils](https://metacpan.org/pod/List::SomeUtils) or [List::UtilsBy](https://metacpan.org/pod/List::UtilsBy)? I sure am. Now you
 don't have to remember. This module will export all of the functions
-that either of those two modules defines.
+that either of those three modules defines.
 
 Note that all function documentation has been shamelessly copied from
-[List::Util](https://metacpan.org/pod/List::Util) and [List::SomeUtils](https://metacpan.org/pod/List::SomeUtils).
+[List::Util](https://metacpan.org/pod/List::Util), [List::SomeUtils](https://metacpan.org/pod/List::SomeUtils) and [List::UtilsBy](https://metacpan.org/pod/List::UtilsBy).
 
 ## Which One Wins?
 
 Recently, [List::Util](https://metacpan.org/pod/List::Util) has started including some of the subs that used to
-only be in [List::SomeUtils](https://metacpan.org/pod/List::SomeUtils). This module always exports the version provided
-by [List::Util](https://metacpan.org/pod/List::Util).
+only be in [List::SomeUtils](https://metacpan.org/pod/List::SomeUtils). Similar, [List::SomeUtils](https://metacpan.org/pod/List::SomeUtils) has some small
+overlap with [List::UtilsBy](https://metacpan.org/pod/List::UtilsBy). `List::AllUtils` always favors the version
+provided by [List::Util](https://metacpan.org/pod/List::Util), [List::SomeUtils](https://metacpan.org/pod/List::SomeUtils) or [List::UtilsBy](https://metacpan.org/pod/List::UtilsBy) in that
+order.
 
-The docs below come from [List::Util](https://metacpan.org/pod/List::Util) 1.31 and [List::SomeUtils](https://metacpan.org/pod/List::SomeUtils) 0.50.
+The docs below come from [List::Util](https://metacpan.org/pod/List::Util) 1.31, [List::SomeUtils](https://metacpan.org/pod/List::SomeUtils) 0.50, and
+[List::UtilsBy](https://metacpan.org/pod/List::UtilsBy) 0.10.
 
 # LIST-REDUCTION FUNCTIONS
 
@@ -776,6 +779,464 @@ that there are more lines of Perl code involved. Therefore, LIST needs to be
 fairly big in order for `minmax` to win over a naive implementation. This
 limitation does not apply to the XS version.
 
+## \*By functions
+
+### rev\_sort\_by
+
+### rev\_nsort\_by
+
+    @vals = rev_sort_by { KEYFUNC } @vals
+
+    @vals = rev_nsort_by { KEYFUNC } @vals
+
+_Since version 0.06._
+
+Similar to `sort_by` and `nsort_by` but returns the list in the reverse
+order. Equivalent to
+
+    @vals = reverse sort_by { KEYFUNC } @vals
+
+except that these functions are slightly more efficient because they avoid
+the final `reverse` operation.
+
+### max\_by
+
+    $optimal = max_by { KEYFUNC } @vals
+
+    @optimal = max_by { KEYFUNC } @vals
+
+Returns the (first) value from `@vals` that gives the numerically largest
+result from the key function.
+
+    my $tallest = max_by { $_->height } @people
+
+    use File::stat qw( stat );
+    my $newest = max_by { stat($_)->mtime } @files;
+
+In scalar context, the first maximal value is returned. In list context, a
+list of all the maximal values is returned. This may be used to obtain
+positions other than the first, if order is significant.
+
+If called on an empty list, an empty list is returned.
+
+For symmetry with the `nsort_by` function, this is also provided under the
+name `nmax_by` since it behaves numerically.
+
+### min\_by
+
+    $optimal = min_by { KEYFUNC } @vals
+
+    @optimal = min_by { KEYFUNC } @vals
+
+Similar to `max_by` but returns values which give the numerically smallest
+result from the key function. Also provided as `nmin_by`
+
+### uniq\_by
+
+    @vals = uniq_by { KEYFUNC } @vals
+
+Returns a list of the subset of values for which the key function block
+returns unique values. The first value yielding a particular key is chosen,
+subsequent values are rejected.
+
+    my @some_fruit = uniq_by { $_->colour } @fruit;
+
+To select instead the last value per key, reverse the input list. If the order
+of the results is significant, don't forget to reverse the result as well:
+
+    my @some_fruit = reverse uniq_by { $_->colour } reverse @fruit;
+
+Because the values returned by the key function are used as hash keys, they
+ought to either be strings, or at least well-behaved as strings (such as
+numbers, or object references which overload stringification in a suitable
+manner).
+
+### partition\_by
+
+    %parts = partition_by { KEYFUNC } @vals
+
+Returns a key/value list of ARRAY refs containing all the original values
+distributed according to the result of the key function block. Each value will
+be an ARRAY ref containing all the values which returned the string from the
+key function, in their original order.
+
+    my %balls_by_colour = partition_by { $_->colour } @balls;
+
+Because the values returned by the key function are used as hash keys, they
+ought to either be strings, or at least well-behaved as strings (such as
+numbers, or object references which overload stringification in a suitable
+manner).
+
+### count\_by
+
+    %counts = count_by { KEYFUNC } @vals
+
+_Since version 0.07._
+
+Returns a key/value list of integers, giving the number of times the key
+function block returned the key, for each value in the list.
+
+    my %count_of_balls = count_by { $_->colour } @balls;
+
+Because the values returned by the key function are used as hash keys, they
+ought to either be strings, or at least well-behaved as strings (such as
+numbers, or object references which overload stringification in a suitable
+manner).
+
+### zip\_by
+
+    @vals = zip_by { ITEMFUNC } \@arr0, \@arr1, \@arr2,...
+
+Returns a list of each of the values returned by the function block, when
+invoked with values from across each each of the given ARRAY references. Each
+value in the returned list will be the result of the function having been
+invoked with arguments at that position, from across each of the arrays given.
+
+    my @transposition = zip_by { [ @_ ] } @matrix;
+
+    my @names = zip_by { "$_[1], $_[0]" } \@firstnames, \@surnames;
+
+    print zip_by { "$_[0] => $_[1]\n" } [ keys %hash ], [ values %hash ];
+
+If some of the arrays are shorter than others, the function will behave as if
+they had `undef` in the trailing positions. The following two lines are
+equivalent:
+
+    zip_by { f(@_) } [ 1, 2, 3 ], [ "a", "b" ]
+    f( 1, "a" ), f( 2, "b" ), f( 3, undef )
+
+The item function is called by `map`, so if it returns a list, the entire
+list is included in the result. This can be useful for example, for generating
+a hash from two separate lists of keys and values
+
+    my %nums = zip_by { @_ } [qw( one two three )], [ 1, 2, 3 ];
+    # %nums = ( one => 1, two => 2, three => 3 )
+
+(A function having this behaviour is sometimes called `zipWith`, e.g. in
+Haskell, but that name would not fit the naming scheme used by this module).
+
+### unzip\_by
+
+    $arr0, $arr1, $arr2, ... = unzip_by { ITEMFUNC } @vals
+
+_Since version 0.09._
+
+Returns a list of ARRAY references containing the values returned by the
+function block, when invoked for each of the values given in the input list.
+Each of the returned ARRAY references will contain the values returned at that
+corresponding position by the function block. That is, the first returned
+ARRAY reference will contain all the values returned in the first position by
+the function block, the second will contain all the values from the second
+position, and so on.
+
+    my ( $firstnames, $lastnames ) = unzip_by { m/^(.*?) (.*)$/ } @names;
+
+If the function returns lists of differing lengths, the result will be padded
+with `undef` in the missing elements.
+
+This function is an inverse of `zip_by`, if given a corresponding inverse
+function.
+
+### extract\_by
+
+    @vals = extract_by { SELECTFUNC } @arr
+
+_Since version 0.05._
+
+Removes elements from the referenced array on which the selection function
+returns true, and returns a list containing those elements. This function is
+similar to `grep`, except that it modifies the referenced array to remove the
+selected values from it, leaving only the unselected ones.
+
+    my @red_balls = extract_by { $_->color eq "red" } @balls;
+
+    # Now there are no red balls in the @balls array
+
+This function modifies a real array, unlike most of the other functions in this
+module. Because of this, it requires a real array, not just a list.
+
+This function is implemented by invoking `splice()` on the array, not by
+constructing a new list and assigning it. One result of this is that weak
+references will not be disturbed.
+
+    extract_by { !defined $_ } @refs;
+
+will leave weak references weakened in the `@refs` array, whereas
+
+    @refs = grep { defined $_ } @refs;
+
+will strengthen them all again.
+
+### extract\_first\_by
+
+    $val = extract_first_by { SELECTFUNC } @arr
+
+_Since version 0.10._
+
+A hybrid between `extract_by` and `List::Util::first`. Removes the first
+element from the referenced array on which the selection function returns
+true, returning it.
+
+As with `extract_by`, this function requires a real array and not just a
+list, and is also implemented using `splice()` so that weak references are
+not disturbed.
+
+If this function fails to find a matching element, it will return an empty
+list in list context. This allows a caller to distinguish the case between
+no matching element, and the first matching element being `undef`.
+
+### weighted\_shuffle\_by
+
+    @vals = weighted_shuffle_by { WEIGHTFUNC } @vals
+
+_Since version 0.07._
+
+Returns the list of values shuffled into a random order. The randomisation is
+not uniform, but weighted by the value returned by the `WEIGHTFUNC`. The
+probability of each item being returned first will be distributed with the
+distribution of the weights, and so on recursively for the remaining items.
+
+### bundle\_by
+
+    @vals = bundle_by { BLOCKFUNC } $number, @vals
+
+_Since version 0.07._
+
+Similar to a regular `map` functional, returns a list of the values returned
+by `BLOCKFUNC`. Values from the input list are given to the block function in
+bundles of `$number`.
+
+If given a list of values whose length does not evenly divide by `$number`,
+the final call will be passed fewer elements than the others.
+
+### rev\_sort\_by
+
+### rev\_nsort\_by
+
+    @vals = rev_sort_by { KEYFUNC } @vals
+
+    @vals = rev_nsort_by { KEYFUNC } @vals
+
+_Since version 0.06._
+
+Similar to `sort_by` and `nsort_by` but returns the list in the reverse
+order. Equivalent to
+
+    @vals = reverse sort_by { KEYFUNC } @vals
+
+except that these functions are slightly more efficient because they avoid
+the final `reverse` operation.
+
+### max\_by
+
+    $optimal = max_by { KEYFUNC } @vals
+
+    @optimal = max_by { KEYFUNC } @vals
+
+Returns the (first) value from `@vals` that gives the numerically largest
+result from the key function.
+
+    my $tallest = max_by { $_->height } @people
+
+    use File::stat qw( stat );
+    my $newest = max_by { stat($_)->mtime } @files;
+
+In scalar context, the first maximal value is returned. In list context, a
+list of all the maximal values is returned. This may be used to obtain
+positions other than the first, if order is significant.
+
+If called on an empty list, an empty list is returned.
+
+For symmetry with the `nsort_by` function, this is also provided under the
+name `nmax_by` since it behaves numerically.
+
+### min\_by
+
+    $optimal = min_by { KEYFUNC } @vals
+
+    @optimal = min_by { KEYFUNC } @vals
+
+Similar to `max_by` but returns values which give the numerically smallest
+result from the key function. Also provided as `nmin_by`
+
+### uniq\_by
+
+    @vals = uniq_by { KEYFUNC } @vals
+
+Returns a list of the subset of values for which the key function block
+returns unique values. The first value yielding a particular key is chosen,
+subsequent values are rejected.
+
+    my @some_fruit = uniq_by { $_->colour } @fruit;
+
+To select instead the last value per key, reverse the input list. If the order
+of the results is significant, don't forget to reverse the result as well:
+
+    my @some_fruit = reverse uniq_by { $_->colour } reverse @fruit;
+
+Because the values returned by the key function are used as hash keys, they
+ought to either be strings, or at least well-behaved as strings (such as
+numbers, or object references which overload stringification in a suitable
+manner).
+
+### partition\_by
+
+    %parts = partition_by { KEYFUNC } @vals
+
+Returns a key/value list of ARRAY refs containing all the original values
+distributed according to the result of the key function block. Each value will
+be an ARRAY ref containing all the values which returned the string from the
+key function, in their original order.
+
+    my %balls_by_colour = partition_by { $_->colour } @balls;
+
+Because the values returned by the key function are used as hash keys, they
+ought to either be strings, or at least well-behaved as strings (such as
+numbers, or object references which overload stringification in a suitable
+manner).
+
+### count\_by
+
+    %counts = count_by { KEYFUNC } @vals
+
+_Since version 0.07._
+
+Returns a key/value list of integers, giving the number of times the key
+function block returned the key, for each value in the list.
+
+    my %count_of_balls = count_by { $_->colour } @balls;
+
+Because the values returned by the key function are used as hash keys, they
+ought to either be strings, or at least well-behaved as strings (such as
+numbers, or object references which overload stringification in a suitable
+manner).
+
+### zip\_by
+
+    @vals = zip_by { ITEMFUNC } \@arr0, \@arr1, \@arr2,...
+
+Returns a list of each of the values returned by the function block, when
+invoked with values from across each each of the given ARRAY references. Each
+value in the returned list will be the result of the function having been
+invoked with arguments at that position, from across each of the arrays given.
+
+    my @transposition = zip_by { [ @_ ] } @matrix;
+
+    my @names = zip_by { "$_[1], $_[0]" } \@firstnames, \@surnames;
+
+    print zip_by { "$_[0] => $_[1]\n" } [ keys %hash ], [ values %hash ];
+
+If some of the arrays are shorter than others, the function will behave as if
+they had `undef` in the trailing positions. The following two lines are
+equivalent:
+
+    zip_by { f(@_) } [ 1, 2, 3 ], [ "a", "b" ]
+    f( 1, "a" ), f( 2, "b" ), f( 3, undef )
+
+The item function is called by `map`, so if it returns a list, the entire
+list is included in the result. This can be useful for example, for generating
+a hash from two separate lists of keys and values
+
+    my %nums = zip_by { @_ } [qw( one two three )], [ 1, 2, 3 ];
+    # %nums = ( one => 1, two => 2, three => 3 )
+
+(A function having this behaviour is sometimes called `zipWith`, e.g. in
+Haskell, but that name would not fit the naming scheme used by this module).
+
+### unzip\_by
+
+    $arr0, $arr1, $arr2, ... = unzip_by { ITEMFUNC } @vals
+
+_Since version 0.09._
+
+Returns a list of ARRAY references containing the values returned by the
+function block, when invoked for each of the values given in the input list.
+Each of the returned ARRAY references will contain the values returned at that
+corresponding position by the function block. That is, the first returned
+ARRAY reference will contain all the values returned in the first position by
+the function block, the second will contain all the values from the second
+position, and so on.
+
+    my ( $firstnames, $lastnames ) = unzip_by { m/^(.*?) (.*)$/ } @names;
+
+If the function returns lists of differing lengths, the result will be padded
+with `undef` in the missing elements.
+
+This function is an inverse of `zip_by`, if given a corresponding inverse
+function.
+
+### extract\_by
+
+    @vals = extract_by { SELECTFUNC } @arr
+
+_Since version 0.05._
+
+Removes elements from the referenced array on which the selection function
+returns true, and returns a list containing those elements. This function is
+similar to `grep`, except that it modifies the referenced array to remove the
+selected values from it, leaving only the unselected ones.
+
+    my @red_balls = extract_by { $_->color eq "red" } @balls;
+
+    # Now there are no red balls in the @balls array
+
+This function modifies a real array, unlike most of the other functions in this
+module. Because of this, it requires a real array, not just a list.
+
+This function is implemented by invoking `splice()` on the array, not by
+constructing a new list and assigning it. One result of this is that weak
+references will not be disturbed.
+
+    extract_by { !defined $_ } @refs;
+
+will leave weak references weakened in the `@refs` array, whereas
+
+    @refs = grep { defined $_ } @refs;
+
+will strengthen them all again.
+
+### extract\_first\_by
+
+    $val = extract_first_by { SELECTFUNC } @arr
+
+_Since version 0.10._
+
+A hybrid between `extract_by` and `List::Util::first`. Removes the first
+element from the referenced array on which the selection function returns
+true, returning it.
+
+As with `extract_by`, this function requires a real array and not just a
+list, and is also implemented using `splice()` so that weak references are
+not disturbed.
+
+If this function fails to find a matching element, it will return an empty
+list in list context. This allows a caller to distinguish the case between
+no matching element, and the first matching element being `undef`.
+
+### weighted\_shuffle\_by
+
+    @vals = weighted_shuffle_by { WEIGHTFUNC } @vals
+
+_Since version 0.07._
+
+Returns the list of values shuffled into a random order. The randomisation is
+not uniform, but weighted by the value returned by the `WEIGHTFUNC`. The
+probability of each item being returned first will be distributed with the
+distribution of the weights, and so on recursively for the remaining items.
+
+### bundle\_by
+
+    @vals = bundle_by { BLOCKFUNC } $number, @vals
+
+_Since version 0.07._
+
+Similar to a regular `map` functional, returns a list of the values returned
+by `BLOCKFUNC`. Values from the input list are given to the block function in
+bundles of `$number`.
+
+If given a list of values whose length does not evenly divide by `$number`,
+the final call will be passed fewer elements than the others.
+
 # EXPORTS
 
 This module exports nothing by default. You can import functions by
@@ -783,7 +1244,7 @@ name, or get everything with the `:all` tag.
 
 # SEE ALSO
 
-`List::Util` and `List::SomeUtils`, obviously.
+[List::Util](https://metacpan.org/pod/List::Util),  [List::SomeUtils](https://metacpan.org/pod/List::SomeUtils) and [List::UtilsBy](https://metacpan.org/pod/List::UtilsBy), obviously.
 
 Also see `Util::Any`, which unifies many more util modules, and also
 lets you rename functions as part of the import.
@@ -819,11 +1280,12 @@ button at [http://www.urth.org/~autarch/fs-donation.html](http://www.urth.org/~a
 
 # AUTHOR
 
-Dave Rolsky &lt;autarch@urth.org>
+Dave Rolsky <autarch@urth.org>
 
-# CONTRIBUTOR
+# CONTRIBUTORS
 
-Ricardo Signes &lt;rjbs@cpan.org>
+- Ricardo Signes <rjbs@cpan.org>
+- Yanick Champoux <yanick@babyl.dyndns.org>
 
 # COPYRIGHT AND LICENCE
 
