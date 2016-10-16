@@ -4,9 +4,11 @@ use warnings;
 use Cwd qw( abs_path );
 use Test::More;
 
-plan skip_all =>
-    'Must set LIST_ALLUTILS_TEST_DEPS to true in order to run these tests'
-    unless $ENV{LIST_ALLUTILS_TEST_DEPS};
+BEGIN {
+    plan skip_all =>
+        'Must set LIST_ALLUTILS_TEST_DEPS to true in order to run these tests'
+        unless $ENV{LIST_ALLUTILS_TEST_DEPS};
+}
 
 use Test::DependentModules qw( test_all_dependents );
 
