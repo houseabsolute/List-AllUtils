@@ -4,7 +4,7 @@ List::AllUtils - Combines List::Util, List::SomeUtils and List::UtilsBy in one b
 
 # VERSION
 
-version 0.11
+version 0.12
 
 # SYNOPSIS
 
@@ -1287,7 +1287,7 @@ Dave Rolsky <autarch@urth.org>
 - Ricardo Signes <rjbs@cpan.org>
 - Yanick Champoux <yanick@babyl.dyndns.org>
 
-# COPYRIGHT AND LICENCE
+# COPYRIGHT AND LICENSE
 
 This software is Copyright (c) 2016 by Dave Rolsky.
 
