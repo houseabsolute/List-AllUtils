@@ -3,7 +3,7 @@ package List::AllUtils;
 use strict;
 use warnings;
 
-our $VERSION = '0.12';
+our $VERSION = '0.13';
 
 use List::Util 1.45      ();
 use List::SomeUtils 0.50 ();
