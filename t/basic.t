@@ -29,7 +29,7 @@ ok( !Foo->can('first'), 'no exports by default' );
 {
     package Bar;
 
-    use List::AllUtils qw( first any apply );
+    use List::AllUtils qw( first any apply rev_sort_by );
 
     sub test_first {
         return first { $_ > 1 } @_;
@@ -37,6 +37,10 @@ ok( !Foo->can('first'), 'no exports by default' );
 
     sub test_apply {
         return apply { $_ *= 2 } @_;
+    }
+
+    sub test_rev_sort_by {
+        return rev_sort_by { $_->{name} } @_;
     }
 }
 
@@ -55,6 +59,12 @@ is_deeply(
     [ Bar::test_apply( 1, 2, 3 ) ],
     [ 2, 4, 6 ],
     'Bar::test_apply returns expected list'
+);
+
+is_deeply(
+    [ Bar::test_rev_sort_by( { name => 'Dave' }, { name => 'Huey-Ling' }, ) ],
+    [ { name => 'Huey-Ling' }, { name => 'Dave' } ],
+    'Bar::test_sort_by returns expected list'
 );
 
 {

@@ -5,23 +5,23 @@ use warnings;
 
 our $VERSION = '0.12';
 
-# List::Util does not define an :all tag
+use List::Util 1.45      ();
+use List::SomeUtils 0.50 ();
+use List::UtilsBy 0.10   ();
+
 BEGIN {
-    use List::Util 1.45 ();
-    List::Util->import(@List::Util::EXPORT_OK);
+    my %imported;
+    for my $module (qw( List::Util List::SomeUtils List::UtilsBy )) {
+        my @ok = do {
+            ## no critic (TestingAndDebugging::ProhibitNoStrict)
+            no strict 'refs';
+            @{ $module . '::EXPORT_OK' };
+        };
 
-    use List::SomeUtils 0.50 ();
+        $module->import( grep { !$imported{$_} } @ok );
 
-    use List::UtilsBy 0.10 ();
-
-    my %imported = map { $_ => 1 } @List::Util::EXPORT_OK;
-    List::SomeUtils->import( grep { !$imported{$_} }
-            @List::SomeUtils::EXPORT_OK );
-
-    %imported = map { $_ => 1 } @List::Util::EXPORT_OK,
-        @List::SomeUtils::EXPORT_OK;
-    List::ByUtils->import( grep { !$imported{$_} }
-            @List::ByUtils::EXPORT_OK );
+        @imported{@ok} = ($module) x @ok;
+    }
 }
 
 use base 'Exporter';

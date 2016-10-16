@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- Nothing from List::UtilsBy was actually being exported, because of a type
+  and a lack of testing. Reported by Greg Oschwald. GitHub #5.
+
+
 0.11    2016-06-26
 
 - Added List::UtilsBy to the list of included modules. Based on a patch from
