@@ -2,7 +2,7 @@
 
 0.12    2016-10-16
 
-- Nothing from List::UtilsBy was actually being exported, because of a type
+- Nothing from List::UtilsBy was actually being exported, because of a typo
   and a lack of testing. Reported by Greg Oschwald. GitHub #5.
 
 
