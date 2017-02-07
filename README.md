@@ -4,7 +4,7 @@ List::AllUtils - Combines List::Util, List::SomeUtils and List::UtilsBy in one b
 
 # VERSION
 
-version 0.13
+version 0.14
 
 # SYNOPSIS
 
