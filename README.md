@@ -1059,6 +1059,7 @@ Dave Rolsky <autarch@urth.org>
 
 # CONTRIBUTORS
 
+- Karen Etheridge <ether@cpan.org>
 - Ricardo Signes <rjbs@cpan.org>
 - Yanick Champoux <yanick@babyl.dyndns.org>
 
