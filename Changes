@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+- Re-release after git pull of some changes.
+
+
 0.13    2017-02-07
 
 - The docs for the subs from List::UtilsBy were repeated twice. Reported by
