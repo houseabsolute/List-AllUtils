@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- The docs for the subs from List::UtilsBy were repeated twice. Reported by
+  Andy Lester. RT #120123.
+
+
 0.12    2016-10-16
 
 - Nothing from List::UtilsBy was actually being exported, because of a type
