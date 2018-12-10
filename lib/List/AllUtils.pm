@@ -74,6 +74,13 @@ order.
 The docs below come from L<List::Util> 1.31, L<List::SomeUtils> 0.50, and
 L<List::UtilsBy> 0.10.
 
+=head1 WHAT IS EXPORTED?
+
+All this module does is load L<List::Util>, L<List::SomeUtils>, and
+L<List::UtilsBy>, and then re-export everything that they provide. That means
+that regardless of the documentation below, you will get any subroutine that
+your installed version provides.
+
 =head1 LIST-REDUCTION FUNCTIONS
 
 The following set of functions all reduce a list down to a single value.
