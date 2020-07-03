@@ -66,7 +66,7 @@ L<List::Util>, L<List::SomeUtils> and L<List::UtilsBy>.
 =head2 Which One Wins?
 
 Recently, L<List::Util> has started including some of the subs that used to
-only be in L<List::SomeUtils>. Similar, L<List::SomeUtils> has some small
+only be in L<List::SomeUtils>. Similarly, L<List::SomeUtils> has some small
 overlap with L<List::UtilsBy>. C<List::AllUtils> always favors the version
 provided by L<List::Util>, L<List::SomeUtils> or L<List::UtilsBy> in that
 order.
