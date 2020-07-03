@@ -67,7 +67,7 @@ L<List::Util>, L<List::SomeUtils> and L<List::UtilsBy>.
 
 Recently, L<List::Util> has started including some of the subs that used to
 only be in L<List::SomeUtils>. Similarly, L<List::SomeUtils> has some small
-overlap with L<List::UtilsBy>. C<List::AllUtils> always favors the version
+overlap with L<List::UtilsBy>. C<List::AllUtils> always favors the subroutine
 provided by L<List::Util>, L<List::SomeUtils> or L<List::UtilsBy> in that
 order.
 
