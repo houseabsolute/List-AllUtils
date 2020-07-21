@@ -85,6 +85,7 @@ your installed version provides.
 
 The following set of functions all apply a given block of code to a list of
 values.
+
 =head2 reduce
 
     $result = reduce { BLOCK } @list
@@ -339,6 +340,7 @@ Instead, write this using a lexical variable:
     my @items = pairgrep { $a eq $key } @kvlist;
     ...
  }
+
 =head2 pairs
 
     my @pairs = pairs @kvlist;
@@ -500,7 +502,9 @@ C<$b> to elements of the given list. Any modifications of it by the code block
 will be visible to the caller.
 
 See L</KNOWN BUGS> for a known-bug with C<pairmap>, and a workaround.
+
 =head1 OTHER FUNCTIONS
+
 =head2 shuffle
 
     my @values = shuffle @values;
@@ -510,6 +514,7 @@ Returns the values of the input in a random order
     @cards = shuffle 0..51      # 0..51 in a random order
 
 This function is affected by the C<$RAND> variable.
+
 =head2 sample
 
     my @items = sample $count, @values
@@ -590,6 +595,7 @@ compares equal to the empty string but additionally produces a warning if such
 warnings are enabled (C<use warnings 'uninitialized';>). In addition, an
 C<undef> in the returned list is coerced into an empty string, so that the
 entire list of values returned by C<uniqstr> are well-behaved as strings.
+
 =head2 head
 
     my @values = head $size, @list;
