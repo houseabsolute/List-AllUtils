@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+- Switched to GitHub Issues.
+
+
 0.17    2020-09-05
 
 - Fix pod formatting errors that hid some function documentation. Fixed by
