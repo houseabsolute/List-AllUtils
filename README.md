@@ -4,7 +4,7 @@ List::AllUtils - Combines List::Util, List::SomeUtils and List::UtilsBy in one b
 
 # VERSION
 
-version 0.17
+version 0.18
 
 # SYNOPSIS
 
@@ -1435,7 +1435,7 @@ Please report any bugs or feature requests to
 [http://rt.cpan.org](http://rt.cpan.org).  I will be notified, and then you'll
 automatically be notified of progress on your bug as I make changes.
 
-Bugs may be submitted at [https://rt.cpan.org/Public/Dist/Display.html?Name=List-AllUtils](https://rt.cpan.org/Public/Dist/Display.html?Name=List-AllUtils) or via email to [bug-list-allutils@rt.cpan.org](mailto:bug-list-allutils@rt.cpan.org).
+Bugs may be submitted at [https://github.com/houseabsolute/List-AllUtils/issues](https://github.com/houseabsolute/List-AllUtils/issues).
 
 I am also usually active on IRC as 'autarch' on `irc://irc.perl.org`.
 

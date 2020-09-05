@@ -72,7 +72,7 @@ work. See the GitHub documentation for [detailed instructions on pull
 requests](https://help.github.com/articles/creating-a-pull-request)
 
 If you have found a bug, but do not have an accompanying patch to fix it, you
-can submit an issue report [via the web](https://rt.cpan.org/Public/Dist/Display.html?Name=List-AllUtils) or [via email](bug-list-allutils@rt.cpan.org).
+can submit an issue report [via the web](https://github.com/houseabsolute/List-AllUtils/issues).
 
 
 
