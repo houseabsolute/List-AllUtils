@@ -307,6 +307,7 @@ I<Since version 1.26.>
 
 Similar to L</sum>, except this returns 0 when given an empty list, rather
 than C<undef>.
+
 =head1 KEY/VALUE PAIR LIST FUNCTIONS
 
 The following set of functions, all inspired by L<List::Pairwise>, consume an
