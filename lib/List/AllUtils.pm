@@ -5,17 +5,24 @@ use warnings;
 
 our $VERSION = '0.19';
 
-use List::Util 1.45      ();
-use List::SomeUtils 0.56 ();
+use List::Util 1.56      ();
+use List::SomeUtils 0.58 ();
 use List::UtilsBy 0.11   ();
 
 BEGIN {
+    my %skip = (
+        'List::Util' => {
+            mesh => 1,
+            zip  => 1,
+        },
+    );
+
     my %imported;
     for my $module (qw( List::Util List::SomeUtils List::UtilsBy )) {
         my @ok = do {
             ## no critic (TestingAndDebugging::ProhibitNoStrict)
             no strict 'refs';
-            @{ $module . '::EXPORT_OK' };
+            grep { !$skip{$module}{$_} } @{ $module . '::EXPORT_OK' };
         };
 
         $module->import( grep { !$imported{$_} } @ok );
@@ -67,11 +74,19 @@ L<List::Util>, L<List::SomeUtils> and L<List::UtilsBy>.
 
 Recently, L<List::Util> has started including some of the subs that used to
 only be in L<List::SomeUtils>. Similarly, L<List::SomeUtils> has some small
-overlap with L<List::UtilsBy>. C<List::AllUtils> always favors the subroutine
-provided by L<List::Util>, L<List::SomeUtils> or L<List::UtilsBy> in that
-order.
+overlap with L<List::UtilsBy>.
 
-The docs below come from L<List::Util> 1.54, L<List::SomeUtils> 0.58, and
+C<List::AllUtils> use to always favors the subroutine provided by
+L<List::Util>, L<List::SomeUtils> or L<List::UtilsBy> in that order. However,
+as of L<List::Util> 1.56, it included some functions, C<mesh> and C<zip> with
+the same name as L<List::SomeUtils> functions, but different behavior.
+
+So going forward, we will always prefer backwards compatibility. This means
+that C<mesh> and C<zip> will always come from L<List::SomeUtils>. If other
+incompatible functions are added to L<List::Util>, those will also be skipped
+in favor of the L<List::SomeUtils> version.
+
+The docs below come from L<List::Util> 1.56, L<List::SomeUtils> 0.58, and
 L<List::UtilsBy> 0.11.
 
 =head1 WHAT IS EXPORTED?
@@ -550,6 +565,28 @@ The C<undef> value is treated by this function as distinct from the empty
 string, and no warning will be produced. It is left as-is in the returned
 list. Subsequent C<undef> values are still considered identical to the first,
 and will be removed.
+
+=head2 uniqint
+
+    my @subset = uniqint @values
+
+I<Since version 1.55.>
+
+Filters a list of values to remove subsequent duplicates, as judged by an
+integer numerical equality test. Preserves the order of unique elements, and
+retains the first value of any duplicate set. Values in the returned list will
+be coerced into integers.
+
+    my $count = uniqint @values
+
+In scalar context, returns the number of elements that would have been
+returned as a list.
+
+Note that C<undef> is treated much as other numerical operations treat it; it
+compares equal to zero but additionally produces a warning if such warnings
+are enabled (C<use warnings 'uninitialized';>). In addition, an C<undef> in
+the returned list is coerced into a numerical zero, so that the entire list of
+values returned by C<uniqint> are well-behaved as integers.
 
 =head2 uniqnum
 
