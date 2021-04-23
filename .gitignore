@@ -1,8 +1,8 @@
+/.tidyall.d
+/test-mydeps-*
 *~
 .\#*
 .build
-/.tidyall.d
-/test-mydeps-*
 Build
 Debian_CPANTS.txt
 List-AllUtils-*
