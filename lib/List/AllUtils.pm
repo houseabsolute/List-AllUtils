@@ -1483,7 +1483,7 @@ I<Since version 0.07.>
 
 Returns the list of values shuffled into a random order. The randomisation is
 not uniform, but weighted by the value returned by the C<WEIGHTFUNC>. The
-probabilty of each item being returned first will be distributed with the
+probability of each item being returned first will be distributed with the
 distribution of the weights, and so on recursively for the remaining items.
 
 =head2 bundle_by
