@@ -1117,7 +1117,7 @@ Returns the index of the only element in LIST for which the criterion
 in BLOCK is true. Sets C<$_> for each item in LIST in turn:
 
     my @list = (1, 3, 4, 3, 2, 4);
-    printf "uniqe index of item 2 in list is %i", onlyidx { $_ == 2 } @list;
+    printf "unique index of item 2 in list is %i", onlyidx { $_ == 2 } @list;
     __END__
     unique index of item 2 in list is 4
 
@@ -1483,7 +1483,7 @@ I<Since version 0.07.>
 
 Returns the list of values shuffled into a random order. The randomisation is
 not uniform, but weighted by the value returned by the C<WEIGHTFUNC>. The
-probabilty of each item being returned first will be distributed with the
+probability of each item being returned first will be distributed with the
 distribution of the weights, and so on recursively for the remaining items.
 
 =head2 bundle_by

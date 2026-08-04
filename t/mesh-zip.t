@@ -4,7 +4,7 @@ use warnings;
 use Test::More;
 
 use List::Util 1.56 ();
-use List::AllUtils qw( mesh zip );
+use List::AllUtils  qw( mesh zip );
 
 my @x = ( 1, 3 );
 my @y = ( 2, 4 );
